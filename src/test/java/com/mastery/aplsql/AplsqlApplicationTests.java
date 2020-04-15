@@ -9,7 +9,7 @@ class AplsqlApplicationTests {
 
     @Test
     void contextLoads() {
-        Assertions.assertEquals(1, 1);
+        Assertions.assertEquals("test","test");
     }
 
 }
