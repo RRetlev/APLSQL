@@ -7,8 +7,17 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class TableProperties {
     private String name;
     private String primaryKey;
+
+    public TableProperties(String name) {
+        this.name = name;
+        this.primaryKey = "id";
+    }
+
+    public TableProperties(String name, String primaryKey) {
+        this.name = name;
+        this.primaryKey = primaryKey;
+    }
 }

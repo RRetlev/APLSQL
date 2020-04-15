@@ -30,14 +30,10 @@ public class AplsqlApplication {
     public CommandLineRunner init(){
         return args -> {
             String record = "alma";
-            ColumnProperties clp = new ColumnProperties("col",true);
-            TableProperties tp = new TableProperties("table","pk");
-            Column column = new Column();
-            Table table = new Table();
-            storage.getDB().put(tp, table);
-            table.getColumns().put(clp,column);
-            column.getData().add(record);
-            System.out.println(storage.getDB().get(tp).getColumns().get(clp).getData().get(0));
+            storage.insertTable("firstTable","Kiskutya");
+            storage.getTableByName("firstTable").insertColumn("fruits",true);
+            storage.getTableByName("firstTable").getColumnByName("fruits").addDataToColumn(record);
+            System.out.println(storage.getTableByName("firstTable").getColumnByName("fruits").getData().get(0));
         };
     }
 

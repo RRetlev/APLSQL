@@ -2,11 +2,8 @@ package com.mastery.aplsql.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -17,5 +14,9 @@ public class Column {
 
     public Column() {
         this.data = new ArrayList<>();
+    }
+
+    public void addDataToColumn(Object d){
+        data.add(d);
     }
 }
