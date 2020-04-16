@@ -13,10 +13,11 @@ public class Table {
     }
 
 
-    public void insertColumn(String columnName, boolean allowNulls){
+    public Column insertColumn(String columnName, boolean allowNulls){
         ColumnProperties columnProperties = new ColumnProperties(columnName,allowNulls);
         Column column = new Column();
         columns.put(columnProperties,column);
+        return column;
     }
 
     public Column getColumnByName(String name){

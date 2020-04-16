@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 @Data
-@NoArgsConstructor
 public class TableProperties {
     private String name;
     private String primaryKey;

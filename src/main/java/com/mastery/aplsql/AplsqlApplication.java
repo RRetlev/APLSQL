@@ -19,23 +19,13 @@ import java.util.Set;
 @SpringBootApplication
 public class AplsqlApplication {
 
-    @Autowired
-    private Storage storage;
+
 
     public static void main(String[] args) {
         SpringApplication.run(AplsqlApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner init(){
-        return args -> {
-            String record = "alma";
-            storage.insertTable("firstTable","Kiskutya");
-            storage.getTableByName("firstTable").insertColumn("fruits",true);
-            storage.getTableByName("firstTable").getColumnByName("fruits").addDataToColumn(record);
-            System.out.println(storage.getTableByName("firstTable").getColumnByName("fruits").getData().get(0));
-        };
-    }
+
 
 
 
