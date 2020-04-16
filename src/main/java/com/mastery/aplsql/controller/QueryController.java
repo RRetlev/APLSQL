@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Queue;
 
 @RestController
+@CrossOrigin
 public class QueryController {
 
     @PostMapping("/create")
