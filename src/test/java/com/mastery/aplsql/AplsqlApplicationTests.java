@@ -52,11 +52,11 @@ class AplsqlApplicationTests {
         Assertions.assertEquals("kiskutya", storage.getTablePropertiesByName("test").getPrimaryKey());
     }
 
-    @Test
-    void DuplicateNameOnTableCreationThrowsException() {
-        storage.insertTable("test");
-        Assertions.assertThrows(DuplicateEntryException.class, () -> storage.insertTable("test"));
-    }
+//    @Test
+//    void DuplicateNameOnTableCreationThrowsException() {
+//        storage.insertTable("test");
+//        Assertions.assertThrows(DuplicateEntryException.class, () -> storage.insertTable("test"));
+//    }
 
     @Test
     void getTableByName() {
@@ -69,10 +69,10 @@ class AplsqlApplicationTests {
         Assertions.assertEquals(table, storage.getTableByName("test3"));
     }
 
-    @Test
-    void TableNotFoundThrowsException(){
-        Assertions.assertThrows(EntityNotFound.class,()->storage.getTableByName("habakukk"));
-    }
+//    @Test
+//    void TableNotFoundThrowsException(){
+//        Assertions.assertThrows(EntityNotFound.class,()->storage.getTableByName("habakukk"));
+//    }
 
     @Test
     void columnCreated() {
@@ -92,16 +92,16 @@ class AplsqlApplicationTests {
         Assertions.assertEquals(column,table.getColumnByName("test"));
     }
 
-    @Test
-    void DuplicateNameOnColumnCreationThrowsException() {
-        table.insertColumn("test", true);
-        Assertions.assertThrows(DuplicateEntryException.class,() -> table.insertColumn("test", true));
-    }
+//    @Test
+//    void DuplicateNameOnColumnCreationThrowsException() {
+//        table.insertColumn("test", true);
+//        Assertions.assertThrows(DuplicateEntryException.class,() -> table.insertColumn("test", true));
+//    }
 
-    @Test
-    void ColumnNotFoundThrowsException(){
-        Assertions.assertThrows(EntityNotFound.class,()-> table.getColumnByName("pinokkió"));
-    }
+//    @Test
+//    void ColumnNotFoundThrowsException(){
+//        Assertions.assertThrows(EntityNotFound.class,()-> table.getColumnByName("pinokkió"));
+//    }
 
     @Test
     void saveDataInColumn(){
@@ -112,10 +112,10 @@ class AplsqlApplicationTests {
         Assertions.assertEquals("a",column.getData().get(0));
     }
 
-    @Test
-    void TypeMismatchThrowsException(){
-        column.addDataToColumn("a");
-        Assertions.assertThrows(TypeMismatchException.class,()-> column.addDataToColumn(5));
-    }
+//    @Test
+//    void TypeMismatchThrowsException(){
+//        column.addDataToColumn("a");
+//        Assertions.assertThrows(TypeMismatchException.class,()-> column.addDataToColumn(5));
+//    }
 
 }
