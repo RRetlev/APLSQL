@@ -1,22 +1,30 @@
 package com.mastery.aplsql.model;
 
+import com.mastery.aplsql.exceptions.TypeMismatchException;
+import com.mastery.aplsql.service.Util;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @AllArgsConstructor
-public class Column {
-    private List<Object> data;
+public class Column<T> {
+    private ArrayList<T> data = new ArrayList<>();
+    private final Class<T> type;
 
-
-    public Column() {
-        this.data = new ArrayList<>();
+    public Column(Class type) {
+        this.type = type;
     }
 
-    public void addDataToColumn(Object d){
-        data.add(d);
+    public void addDataToColumn(T t) throws TypeMismatchException {
+        if (t.getClass() == type) {
+            data.add(t);
+        } else {
+            throw new TypeMismatchException();
+        }
+    }
+
+    public List<T> getData() {
+        return data;
     }
 }
