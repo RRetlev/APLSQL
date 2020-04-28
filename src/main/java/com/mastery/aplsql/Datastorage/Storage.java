@@ -21,7 +21,7 @@ public class Storage {
             DB.put(tableProperties, table);
             return table;
         }
-        throw new DuplicateEntryException();
+        throw new DuplicateEntryException("Table name:"+ tableProperties.getName()+"is already present in the Database");
     }
 
 

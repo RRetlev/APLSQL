@@ -29,19 +29,19 @@ public class QueryController {
     }
 
     @GetMapping("/select")
-    public List<List<String>> getResultOfQuery(@RequestParam Query query) {
+    public List<List<String>> getResultOfQuery(@RequestBody Query query) {
         System.out.println(query.getQueryString());
         return null;
     }
 
     @PostMapping("/insert")
-    public List<String> addRecord(@RequestParam Query query) {
+    public List<String> addRecord(@RequestBody Query query) {
         System.out.println(query.getQueryString());
         return null;
     }
 
     @PutMapping("/update")
-    public List<String> updateRecord(@RequestParam Query query) {
+    public List<String> updateRecord(@RequestBody Query query) {
         System.out.println(query.getQueryString());
         return null;
     }
