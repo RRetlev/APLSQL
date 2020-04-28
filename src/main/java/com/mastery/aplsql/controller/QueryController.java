@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Queue;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "https://clever-kirch-da97d8.netlify.app/")
 public class QueryController {
 
     @PostMapping("/create")
