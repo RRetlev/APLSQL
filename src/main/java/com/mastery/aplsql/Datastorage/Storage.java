@@ -14,27 +14,16 @@ public class Storage {
     private HashMap<TableProperties, Table> DB = new HashMap<>();
     private Set<String> tableNames = new HashSet<>();
 
-    public Table insertTable(String tableName, String tablePrimaryKey) throws DuplicateEntryException {
-        if (!Util.containsName(tableNames, tableName)) {
-            TableProperties tableProperties = new TableProperties(tableName, tablePrimaryKey);
+    public Table insertTable(TableProperties tableProperties) throws DuplicateEntryException {
+        if (!Util.containsName(tableNames, tableProperties.getName())) {
             Table table = new Table();
-            tableNames.add(tableName);
+            tableNames.add(tableProperties.getName());
             DB.put(tableProperties, table);
             return table;
         }
         throw new DuplicateEntryException();
     }
 
-    public Table insertTable(String tableName) throws DuplicateEntryException {
-        if (!Util.containsName(tableNames, tableName)) {
-            TableProperties tableProperties = new TableProperties(tableName);
-            Table table = new Table();
-            tableNames.add(tableName);
-            DB.put(tableProperties, table);
-            return table;
-        }
-        throw new DuplicateEntryException();
-    }
 
     public Table getTableByName(String name) throws EntityNotFoundException {
         for (Map.Entry<TableProperties, Table> entry :

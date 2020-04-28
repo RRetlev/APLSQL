@@ -18,21 +18,10 @@ public class Table {
     }
 
 
-    public Column insertColumn(String columnName, boolean allowNulls,Types dataType) throws Exception {
-        if (!Util.containsName(columnNames, columnName)) {
-            ColumnProperties columnProperties = new ColumnProperties(columnName, allowNulls,dataType.dataType);
-            var column = Util.createColumn(dataType.dataType);
-            columnNames.add(columnName);
-            columns.put(columnProperties, column);
-            return column;
-        }
-        throw new DuplicateEntryException();
-    }
-    public Column insertColumn(String columnName, Types dataType) throws Exception {
-        if (!Util.containsName(columnNames, columnName)) {
-            ColumnProperties columnProperties = new ColumnProperties(columnName,dataType.dataType);
-            var column = Util.createColumn(dataType.dataType);
-            columnNames.add(columnName);
+    public Column insertColumn(ColumnProperties columnProperties) throws Exception {
+        if (!Util.containsName(columnNames, columnProperties.getName())) {
+            var column = Util.createColumn(columnProperties.getDataType().dataType);
+            columnNames.add(columnProperties.getName());
             columns.put(columnProperties, column);
             return column;
         }
@@ -46,5 +35,17 @@ public class Table {
                 return entry.getValue();
             }
         throw new EntityNotFoundException();
+    }
+
+    public void insertColumns(HashMap<String, String> columnSpecs) {
+        for (Map.Entry<String,String> entry: columnSpecs.entrySet()
+             ) {
+            ColumnProperties columnProperties = new ColumnProperties(entry.getKey(),Util.getDataTypeFromString(entry.getValue()));
+            try {
+                insertColumn(columnProperties);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

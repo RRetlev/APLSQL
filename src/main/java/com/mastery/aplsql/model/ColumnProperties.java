@@ -11,9 +11,9 @@ import java.lang.reflect.Type;
 public class ColumnProperties {
     private String name;
     private boolean AllowNulls;
-    private Class dataType;
+    private Types dataType;
 
-    public ColumnProperties(String name, Class datatype) {
+    public ColumnProperties(String name, Types datatype) {
         this.name = name;
         this.AllowNulls = true;
         dataType = datatype;

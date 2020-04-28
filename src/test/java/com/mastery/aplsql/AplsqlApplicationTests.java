@@ -4,9 +4,7 @@ import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptions.DuplicateEntryException;
 import com.mastery.aplsql.exceptions.EntityNotFoundException;
 import com.mastery.aplsql.exceptions.TypeMismatchException;
-import com.mastery.aplsql.model.Column;
-import com.mastery.aplsql.model.Table;
-import com.mastery.aplsql.model.Types;
+import com.mastery.aplsql.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,8 @@ class AplsqlApplicationTests {
     @BeforeEach
     void init() throws Exception {
         storage = new Storage();
-        table = storage.insertTable("testTable");
-        column = table.insertColumn("testColumn",Types.STRING);
-
+        table = storage.insertTable(new TableProperties("testTable"));
+        column = table.insertColumn(new ColumnProperties("testColumn",Types.STRING));
     }
 
     @Test
@@ -41,30 +38,30 @@ class AplsqlApplicationTests {
 
     @Test
     void tableCreatedWithoutPrimaryKeyGetsID() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable("test");
+        storage.insertTable(new TableProperties("test"));
         Assertions.assertEquals("id", storage.getTablePropertiesByName("test").getPrimaryKey());
     }
 
     @Test
     void tableCreatedWithPrimaryKeyGetsIt() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable("test", "kiskutya");
+        storage.insertTable(new TableProperties("test", "kiskutya"));
         Assertions.assertEquals("kiskutya", storage.getTablePropertiesByName("test").getPrimaryKey());
     }
 
     @Test
     void DuplicateNameOnTableCreationThrowsException() throws DuplicateEntryException {
-        storage.insertTable("test");
-        Assertions.assertThrows(DuplicateEntryException.class, () -> storage.insertTable("test"));
+        storage.insertTable(new TableProperties("test"));
+        Assertions.assertThrows(DuplicateEntryException.class, () -> storage.insertTable(new TableProperties("test")));
     }
 
     @Test
     void getTableByName() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable("test1");
-        storage.insertTable("test2");
-        Table table = storage.insertTable("test3");
-        storage.insertTable("test4");
-        storage.insertTable("test5");
-        storage.insertTable("test6");
+        storage.insertTable(new TableProperties("test1"));
+        storage.insertTable(new TableProperties("test2"));
+        Table table = storage.insertTable(new TableProperties("test3"));
+        storage.insertTable(new TableProperties("test4"));
+        storage.insertTable(new TableProperties("test5"));
+        storage.insertTable(new TableProperties("test6"));
         Assertions.assertEquals(table, storage.getTableByName("test3"));
     }
 
@@ -75,26 +72,26 @@ class AplsqlApplicationTests {
 
     @Test
     void columnCreated() throws Exception {
-        table.insertColumn("kutya", Types.STRING);
-        table.insertColumn("cica", Types.STRING);
+        table.insertColumn(new ColumnProperties("kutya", Types.STRING));
+        table.insertColumn(new ColumnProperties("cica", Types.STRING));
         Assertions.assertEquals(3, table.getColumns().size());
     }
 
     @Test
     void GetColumnByName() throws Exception {
-        table.insertColumn("test2",Types.STRING);
-        table.insertColumn("test3",Types.STRING);
-        Column column = table.insertColumn("test",Types.STRING);
-        table.insertColumn("test5",Types.STRING);
-        table.insertColumn("test9",Types.STRING);
-        table.insertColumn("test76",Types.STRING);
+        table.insertColumn(new ColumnProperties("test2",Types.STRING));
+        table.insertColumn(new ColumnProperties("test3",Types.STRING));
+        Column column = table.insertColumn(new ColumnProperties("test",Types.STRING));
+        table.insertColumn(new ColumnProperties("test5",Types.STRING));
+        table.insertColumn(new ColumnProperties("test9",Types.STRING));
+        table.insertColumn(new ColumnProperties("test76",Types.STRING));
         Assertions.assertEquals(column,table.getColumnByName("test"));
     }
 
     @Test
     void DuplicateNameOnColumnCreationThrowsException() throws Exception {
-        table.insertColumn("test", Types.STRING);
-        Assertions.assertThrows(DuplicateEntryException.class,() -> table.insertColumn("test", Types.STRING));
+        table.insertColumn(new ColumnProperties("test", Types.STRING));
+        Assertions.assertThrows(DuplicateEntryException.class,() -> table.insertColumn(new ColumnProperties("test", Types.STRING)));
     }
 
     @Test
