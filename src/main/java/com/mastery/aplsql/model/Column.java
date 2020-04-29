@@ -27,4 +27,8 @@ public class Column<T> {
     public List<T> getData() {
         return data;
     }
+
+    public T getDataAtIndex(int i){
+        return data.get(i);
+    }
 }

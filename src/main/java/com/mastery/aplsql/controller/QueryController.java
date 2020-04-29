@@ -2,10 +2,12 @@ package com.mastery.aplsql.controller;
 
 import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptions.DuplicateEntryException;
+import com.mastery.aplsql.exceptions.EntityNotFoundException;
 import com.mastery.aplsql.model.Query;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.CreateQueryStringParser;
+import com.mastery.aplsql.service.InsertQueryStringParser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,6 +43,13 @@ public class QueryController {
 
     @PostMapping("/insert")
     public List<String> addRecord(@RequestBody Query query) {
+        try {
+            Table table = storage.getTableByName(InsertQueryStringParser.parseTableName(query.getQueryString()));
+            table.insertRecords(InsertQueryStringParser.parseInsertValues(query.getQueryString()));
+        } catch (EntityNotFoundException e) {
+            e.printStackTrace();
+        }
+
         System.out.println(query.getQueryString());
         return null;
     }

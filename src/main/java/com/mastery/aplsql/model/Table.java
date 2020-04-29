@@ -2,6 +2,7 @@ package com.mastery.aplsql.model;
 
 import com.mastery.aplsql.exceptions.DuplicateEntryException;
 import com.mastery.aplsql.exceptions.EntityNotFoundException;
+import com.mastery.aplsql.exceptions.TypeMismatchException;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
@@ -44,6 +45,19 @@ public class Table {
             try {
                 insertColumn(columnProperties);
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void insertRecords(Map<String,String> map){
+        for (Map.Entry<String,String> entry: map.entrySet()
+             ) {
+            try {
+                getColumnByName(entry.getKey()).addDataToColumn(entry.getValue());
+            } catch (TypeMismatchException e) {
+                e.printStackTrace();
+            } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
         }
