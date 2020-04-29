@@ -16,6 +16,11 @@ public class QueryController {
 
     private Storage storage = new Storage();
 
+    @GetMapping("/isworking")
+    public Boolean isWorking(){
+        return true;
+    }
+
     @PostMapping("/create")
     public String createTable(@RequestBody Query query) {
         try {
@@ -24,7 +29,7 @@ public class QueryController {
         } catch (DuplicateEntryException e) {
             e.printStackTrace();
         }
-        return "A table was created from this" + query.getQueryString() + "String";
+        return "A table was created from this " + query.getQueryString() + " String";
 
     }
 

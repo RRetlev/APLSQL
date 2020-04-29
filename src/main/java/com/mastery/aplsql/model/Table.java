@@ -25,7 +25,7 @@ public class Table {
             columns.put(columnProperties, column);
             return column;
         }
-        throw new DuplicateEntryException("Column name:"+ columnProperties.getName()+"is already present in the Table");
+        throw new DuplicateEntryException("Column name: "+ columnProperties.getName()+" is already present in the Table");
     }
 
     public Column getColumnByName(String name) throws EntityNotFoundException {
