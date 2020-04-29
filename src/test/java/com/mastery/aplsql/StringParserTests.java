@@ -1,6 +1,7 @@
 package com.mastery.aplsql;
 
 import com.mastery.aplsql.service.CreateQueryStringParser;
+import com.mastery.aplsql.service.InsertQueryStringParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,27 +14,47 @@ import java.util.Map;
 public class StringParserTests {
 
     @Test
-    void isTableNameRetrieved(){
+    void isCrateTableNameRetrieved(){
         String s= "CREATE table dirrdurr";
         Assertions.assertEquals("dirrdurr", CreateQueryStringParser.parseTableName(s));
     }
 
     @Test
-    void oneParameterParsed(){
+    void oneCreateParameterParsed(){
         String s= "CREATE table dirrdurr(col string)";
-        Map<String,String>map = new HashMap<>();
-        map.put("col","string");
+        Map<String,String>map = Map.of("col","string");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
     }
 
     @Test
-    void multipleParametersParsed(){
+    void multipleCreateParametersParsed(){
         String s= "CREATE table dirrdurr(col string , other string , another int)";
-        Map<String,String>map = new HashMap<>();
-        map.put("col","string");
-        map.put("other","string");
-        map.put("another","int");
+        Map<String,String>map = Map.of("col","string","other","string","another","int");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
+    }
+
+    @Test
+    void isInsertTableNameRetrieved(){
+        String s = "INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)\n" +
+                "VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');";
+        Assertions.assertEquals("Customers", InsertQueryStringParser.parseTableName(s));
+    }
+
+    @Test
+    void oneInsertParameterParsed(){
+        String s = "INSERT INTO test (name)" +
+                "VALUES (Jack)";
+        Map<String,String> map = Map.of("name","Jack");
+        Assertions.assertEquals(map,InsertQueryStringParser.parseInsertValues(s));
+    }
+
+    @Test
+    void multipleInsertParameterParsed(){
+        String s = "INSERT INTO test (name, age, color)" +
+                "VALUES (Jack, 2, blue)";
+        Map<String,String> map = Map.of("name","Jack","age","2","color","blue");
+        Assertions.assertEquals(map,InsertQueryStringParser.parseInsertValues(s));
+
     }
 
 
