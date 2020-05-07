@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+import java.util.Map;
+
 
 @SpringBootTest
 class AplsqlApplicationTests {
@@ -22,7 +25,7 @@ class AplsqlApplicationTests {
     void init() throws Exception {
         storage = new Storage();
         table = storage.insertTable(new TableProperties("testTable"));
-        column = table.insertColumn(new ColumnProperties("testColumn",Types.STRING));
+        column = table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
     }
 
     @Test
@@ -66,8 +69,8 @@ class AplsqlApplicationTests {
     }
 
     @Test
-    void TableNotFoundThrowsException(){
-        Assertions.assertThrows(EntityNotFoundException.class,()->storage.getTableByName("habakukk"));
+    void TableNotFoundThrowsException() {
+        Assertions.assertThrows(EntityNotFoundException.class, () -> storage.getTableByName("habakukk"));
     }
 
     @Test
@@ -79,24 +82,24 @@ class AplsqlApplicationTests {
 
     @Test
     void GetColumnByName() throws Exception {
-        table.insertColumn(new ColumnProperties("test2",Types.STRING));
-        table.insertColumn(new ColumnProperties("test3",Types.STRING));
-        Column column = table.insertColumn(new ColumnProperties("test",Types.STRING));
-        table.insertColumn(new ColumnProperties("test5",Types.STRING));
-        table.insertColumn(new ColumnProperties("test9",Types.STRING));
-        table.insertColumn(new ColumnProperties("test76",Types.STRING));
-        Assertions.assertEquals(column,table.getColumnByName("test"));
+        table.insertColumn(new ColumnProperties("test2", Types.STRING));
+        table.insertColumn(new ColumnProperties("test3", Types.STRING));
+        Column column = table.insertColumn(new ColumnProperties("test", Types.STRING));
+        table.insertColumn(new ColumnProperties("test5", Types.STRING));
+        table.insertColumn(new ColumnProperties("test9", Types.STRING));
+        table.insertColumn(new ColumnProperties("test76", Types.STRING));
+        Assertions.assertEquals(column, table.getColumnByName("test"));
     }
 
     @Test
     void DuplicateNameOnColumnCreationThrowsException() throws Exception {
         table.insertColumn(new ColumnProperties("test", Types.STRING));
-        Assertions.assertThrows(DuplicateEntryException.class,() -> table.insertColumn(new ColumnProperties("test", Types.STRING)));
+        Assertions.assertThrows(DuplicateEntryException.class, () -> table.insertColumn(new ColumnProperties("test", Types.STRING)));
     }
 
     @Test
-    void ColumnNotFoundThrowsException(){
-        Assertions.assertThrows(EntityNotFoundException.class,()-> table.getColumnByName("pinokkió"));
+    void ColumnNotFoundThrowsException() {
+        Assertions.assertThrows(EntityNotFoundException.class, () -> table.getColumnByName("pinokkió"));
     }
 
     @Test
@@ -105,13 +108,23 @@ class AplsqlApplicationTests {
         column.addDataToColumn("b");
         column.addDataToColumn("c");
         column.addDataToColumn("d");
-        Assertions.assertEquals("a",column.getData().get(0));
+        Assertions.assertEquals("a", column.getData().get(0));
     }
 
     @Test
     void TypeMismatchThrowsException() throws TypeMismatchException {
         column.addDataToColumn("a");
-        Assertions.assertThrows(TypeMismatchException.class,()-> column.addDataToColumn(5));
+        Assertions.assertThrows(TypeMismatchException.class, () -> column.addDataToColumn(5));
+    }
+
+    @Test
+    void SelectQueriResultCorrectorder() throws Exception {
+        List<String> names = List.of("testColumn", "alma", "körte");
+        table.insertColumn(new ColumnProperties("alma", Types.STRING));
+        table.insertColumn(new ColumnProperties("körte", Types.STRING));
+        table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
+        table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names));
     }
 
 }

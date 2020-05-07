@@ -2,12 +2,14 @@ package com.mastery.aplsql;
 
 import com.mastery.aplsql.service.CreateQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
+import com.mastery.aplsql.service.SelectQueryStringParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -55,6 +57,13 @@ public class StringParserTests {
         Map<String,String> map = Map.of("name","Jack","age","2","color","blue");
         Assertions.assertEquals(map,InsertQueryStringParser.parseInsertValues(s));
 
+    }
+
+    @Test
+    void oneSelectColumnNameParsed(){
+        String s = "SELECT alma,körte,szilva from testTable";
+        List<String> list = List.of("alma","körte","szilva");
+        Assertions.assertEquals(list, SelectQueryStringParser.parseColumnNames(s));
     }
 
 
