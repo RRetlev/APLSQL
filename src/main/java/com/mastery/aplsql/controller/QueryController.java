@@ -8,6 +8,7 @@ import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.CreateQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
+import com.mastery.aplsql.service.SelectQueryStringParser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,10 +36,16 @@ public class QueryController {
 
     }
 
-    @GetMapping("/select")
+    @PostMapping("/select")
     public List<List<String>> getResultOfQuery(@RequestBody Query query) {
-        System.out.println(query.getQueryString());
-        return null;
+        String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
+        List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
+        try {
+            return storage.getTableByName(tableName).selectRecords(columnNames);
+        } catch (EntityNotFoundException e) { // TODO : messaging...
+            e.printStackTrace();
+        }
+        return null; // TODO : Create response entity.
     }
 
     @PostMapping("/insert")
