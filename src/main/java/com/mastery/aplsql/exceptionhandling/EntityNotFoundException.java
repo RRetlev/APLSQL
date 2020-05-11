@@ -1,4 +1,4 @@
-package com.mastery.aplsql.exceptions;
+package com.mastery.aplsql.exceptionhandling;
 
 public class EntityNotFoundException extends Exception {
 }

@@ -1,7 +1,7 @@
 package com.mastery.aplsql.Datastorage;
 
-import com.mastery.aplsql.exceptions.DuplicateEntryException;
-import com.mastery.aplsql.exceptions.EntityNotFoundException;
+import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
+import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.Util;
@@ -21,26 +21,24 @@ public class Storage {
             DB.put(tableProperties, table);
             return table;
         }
-        throw new DuplicateEntryException("Table name: "+ tableProperties.getName()+" is already present in the Database");
+        throw new DuplicateEntryException();
     }
 
 
     public Table getTableByName(String name) throws EntityNotFoundException {
-        for (Map.Entry<TableProperties, Table> entry :
-                DB.entrySet())
-            if ((entry.getKey().getName()).equals(name)) {
-                return entry.getValue();
-            }
-        throw new EntityNotFoundException();
+        return DB.entrySet()
+                .stream()
+                .filter(tablePropertiesTableEntry -> tablePropertiesTableEntry.getKey().getName().equals(name))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new).getValue();
     }
 
 
     public TableProperties getTablePropertiesByName(String name) throws EntityNotFoundException {
-        for (TableProperties tp : DB.keySet()) {
-            if (tp.getName().equals(name)) {
-                return tp;
-            }
-        }
-        throw new EntityNotFoundException();
+        return DB.keySet()
+                .stream()
+                .filter(tableProperties -> tableProperties.getName().equals(name))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
     }
 }

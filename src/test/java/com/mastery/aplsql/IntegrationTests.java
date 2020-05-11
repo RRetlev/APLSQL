@@ -1,8 +1,6 @@
 package com.mastery.aplsql;
 
 import com.mastery.aplsql.Datastorage.Storage;
-import com.mastery.aplsql.exceptions.DuplicateEntryException;
-import com.mastery.aplsql.exceptions.EntityNotFoundException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.CreateQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
@@ -21,7 +19,7 @@ public class IntegrationTests {
     }
 
     @Test
-    void TableCreatedFromQueryString() throws DuplicateEntryException, EntityNotFoundException {
+    void TableCreatedFromQueryString() throws Exception {
         String s = "CREATE table pipacs(ID int)";
         Table table = storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(s)));
         table.insertColumns(CreateQueryStringParser.getColumnSpecs(s));

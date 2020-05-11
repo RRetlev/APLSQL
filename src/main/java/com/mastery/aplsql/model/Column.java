@@ -1,7 +1,6 @@
 package com.mastery.aplsql.model;
 
-import com.mastery.aplsql.exceptions.TypeMismatchException;
-import com.mastery.aplsql.service.Util;
+import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;

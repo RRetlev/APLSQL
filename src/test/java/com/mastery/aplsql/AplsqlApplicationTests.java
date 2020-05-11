@@ -1,9 +1,9 @@
 package com.mastery.aplsql;
 
 import com.mastery.aplsql.Datastorage.Storage;
-import com.mastery.aplsql.exceptions.DuplicateEntryException;
-import com.mastery.aplsql.exceptions.EntityNotFoundException;
-import com.mastery.aplsql.exceptions.TypeMismatchException;
+import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
+import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
+import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

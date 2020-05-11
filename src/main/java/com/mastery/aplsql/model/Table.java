@@ -1,13 +1,12 @@
 package com.mastery.aplsql.model;
 
-import com.mastery.aplsql.exceptions.DuplicateEntryException;
-import com.mastery.aplsql.exceptions.EntityNotFoundException;
-import com.mastery.aplsql.exceptions.TypeMismatchException;
+import com.mastery.aplsql.exceptionhandling.*;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Data
 public class Table {
@@ -22,79 +21,52 @@ public class Table {
     }
 
 
-    public Column insertColumn(ColumnProperties columnProperties) throws Exception {
+    public Column insertColumn(ColumnProperties columnProperties) throws DuplicateEntryException {
         if (!Util.containsName(columnNames, columnProperties.getName())) {
             var column = Util.createColumn(columnProperties.getDataType().dataType);
             columnNames.add(columnProperties.getName());
             columns.put(columnProperties, column);
             return column;
         }
-        throw new DuplicateEntryException("Column name: " + columnProperties.getName() + " is already present in the Table");
+        throw new DuplicateEntryException();
     }
 
     public Column getColumnByName(String name) throws EntityNotFoundException {
-        for (Map.Entry<ColumnProperties, Column> entry :
-                columns.entrySet())
-            if (entry.getKey().getName().equals(name)) {
-                return entry.getValue();
-            }
-        throw new EntityNotFoundException();
+        return columns.entrySet()
+                .stream()
+                .filter(columnEntry -> columnEntry.getKey().getName().equals(name))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new).getValue();
     }
 
     public void insertColumns(HashMap<String, String> columnSpecs) {
-        for (Map.Entry<String, String> entry : columnSpecs.entrySet()
-        ) {
-            ColumnProperties columnProperties = new ColumnProperties(entry.getKey(), Util.getDataTypeFromString(entry.getValue()));
-            try {
-                insertColumn(columnProperties);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        columnSpecs.forEach( ThrowingBiConsumer.unchecked((key,value) -> insertColumn(new ColumnProperties(key, Util.getDataTypeFromString(value)))));
     }
 
     public ColumnProperties getColumnPropertiesByName(String name) throws EntityNotFoundException {
-        for (ColumnProperties cp : columns.keySet()) {
-            if (cp.getName().equals(name)) {
-                return cp;
-            }
-        }
-        throw new EntityNotFoundException();
+        return columns.keySet()
+                .stream()
+                .filter(columnProperties -> columnProperties.getName().equals(name))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
     }
 
-    public void insertRecords(Map<String, String> map) {
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            try {
-                ColumnProperties cp = getColumnPropertiesByName(entry.getKey());
-                Class cl = cp.getDataType().dataType;
-                getColumnByName(entry.getKey()).addDataToColumn(cp.getDataType().convert(entry.getValue()));
-
-            } catch (TypeMismatchException e) {
-                e.printStackTrace();
-            } catch (EntityNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
+    public void insertRecords(Map<String, String> map){
+        map.forEach(ThrowingBiConsumer.unchecked((key, value) -> getColumnByName(key).addDataToColumn(getColumnPropertiesByName(key).getDataType().convert(value))));
         idPointer++;
     }
 
     public List<List<String>> selectRecords(List<String> columnNames) {
         List<List<String>> queryResult = new ArrayList<>();
         queryResult.add(columnNames);
-        List<Column> columnsFromSelect = new ArrayList<>();
-        for (Map.Entry<ColumnProperties, Column> entry : columns.entrySet()
-        ) {
-            if (columnNames.contains(entry.getKey().getName())) {
-                columnsFromSelect.add(entry.getValue());
-            }
-        }
-        for (int i = 0; i < idPointer; i++) {
-            if (true) {
-                int finalI = i;
-                queryResult.add(columnsFromSelect.stream().map(col -> col.getDataAtIndex(finalI).toString()).collect(Collectors.toList()));
-            }
-        }
+        List<Column> columnsFromSelect = columns.entrySet()
+                .stream()
+                .filter(columnPropertiesColumnEntry -> columnNames.contains(columnPropertiesColumnEntry.getKey().getName()))
+                .map(Map.Entry::getValue)
+                .collect(Collectors.toList());
+        // TODO IntStream
+        IntStream.range(0,idPointer)
+                .forEach(i -> queryResult.add(columnsFromSelect.stream().map(col -> col.getDataAtIndex(i).toString()).collect(Collectors.toList())));
         return queryResult;
     }
 }
