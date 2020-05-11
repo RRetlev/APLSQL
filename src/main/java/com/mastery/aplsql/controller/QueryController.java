@@ -38,8 +38,12 @@ public class QueryController {
 
     @PostMapping("/select")
     public List<List<String>> getResultOfQuery(@RequestBody Query query) {
+        System.out.println(query.getQueryString());
+
         String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
         List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
+
+        System.out.println("table name: " + tableName + "; column names: " + columnNames.toString());
         try {
             return storage.getTableByName(tableName).selectRecords(columnNames);
         } catch (EntityNotFoundException e) { // TODO : messaging...
