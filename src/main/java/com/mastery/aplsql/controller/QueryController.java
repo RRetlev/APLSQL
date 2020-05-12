@@ -12,6 +12,8 @@ import com.mastery.aplsql.service.DropTableQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,10 +62,10 @@ public class QueryController {
     }
 
     @DeleteMapping("/drop-table")
-    public String dropTable(@RequestBody Query query) throws EntityNotFoundException {
+    public ResponseEntity<String> dropTable(@RequestBody Query query) throws EntityNotFoundException {
         log.info(query.getQueryString());
         String tableName = DropTableQueryStringParser.parseTableName(query.getQueryString());
         storage.dropTable(tableName);
-        return "The table '" + tableName + "' has been dropped.";
+        return new ResponseEntity<>("The table '" + tableName + "' has been dropped.", HttpStatus.OK);
     }
 }
