@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin
@@ -48,11 +49,14 @@ public class QueryController {
     }
 
     @PostMapping("/insert")
-    public List<String> addRecord(@RequestBody Query query) throws EntityNotFoundException, TypeMismatchException {
+    public ResponseEntity<String> addRecord(@RequestBody Query query) throws EntityNotFoundException, TypeMismatchException {
         log.info(query.getQueryString());
-        Table table = storage.getTableByName(InsertQueryStringParser.parseTableName(query.getQueryString()));
-        table.insertRecords(InsertQueryStringParser.parseInsertValues(query.getQueryString()));
-        return null;
+        String tableName = InsertQueryStringParser.parseTableName(query.getQueryString());
+        Map<String, String> insertValues = InsertQueryStringParser.parseInsertValues(query.getQueryString());
+        Table table = storage.getTableByName(tableName);
+        table.insertRecords(insertValues);
+        return new ResponseEntity<>(insertValues.keySet() + " values have been inserted to columns " +
+                insertValues.values() + " of table " + tableName, HttpStatus.OK);
     }
 
     @PutMapping("/update")
