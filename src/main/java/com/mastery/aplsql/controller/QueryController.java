@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +33,11 @@ public class QueryController {
     }
 
     @PostMapping("/create")
-    public String createTable(@RequestBody Query query) throws DuplicateEntryException {
-        Table table = storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(query.getQueryString())));
-        table.insertColumns(CreateQueryStringParser.getColumnSpecs(query.getQueryString()));
-        return "A table was created from this " + query.getQueryString() + " String";
+    public ResponseEntity<String> createTable(@RequestBody Query query) throws DuplicateEntryException {
+        String tableName = CreateQueryStringParser.parseTableName(query.getQueryString());
+        HashMap<String, String> columnSpecs = CreateQueryStringParser.getColumnSpecs(query.getQueryString());
+        storage.insertTable(new TableProperties(tableName)).insertColumns(columnSpecs);
+        return new ResponseEntity<>("Table '" + tableName + "' has been created with columns " + columnSpecs.keySet(), HttpStatus.OK);
     }
 
     @PostMapping("/select")
@@ -43,7 +45,6 @@ public class QueryController {
         log.info(query.getQueryString());
         String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
         List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
-        log.info("table name: " + tableName + "; column names: " + columnNames.toString());
         return storage.getTableByName(tableName).selectRecords(columnNames);
         // TODO : Create response entity.
     }
@@ -55,8 +56,8 @@ public class QueryController {
         Map<String, String> insertValues = InsertQueryStringParser.parseInsertValues(query.getQueryString());
         Table table = storage.getTableByName(tableName);
         table.insertRecords(insertValues);
-        return new ResponseEntity<>(insertValues.keySet() + " values have been inserted to columns " +
-                insertValues.values() + " of table " + tableName, HttpStatus.OK);
+        return new ResponseEntity<>(insertValues.values() + " values have been inserted to columns " +
+                insertValues.keySet() + " of table '" + tableName + "'.", HttpStatus.OK);
     }
 
     @PutMapping("/update")
