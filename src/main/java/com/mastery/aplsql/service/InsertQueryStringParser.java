@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class InsertQueryStringParser {
     public static String parseTableName(String queryString){
-        Pattern p = Pattern.compile(".*?\\bINTO\\s+(\\w+)\\b.*");
+        Pattern p = Pattern.compile("INSERT INTO\\s+(\\w+)\\b.*");
         Matcher m = p.matcher(queryString);
         if (m.find()){
             return m.group(1);

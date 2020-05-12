@@ -31,11 +31,11 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = {TypeMismatchException.class})
+    @ExceptionHandler(value = {TypeMismatchException.class, NumberFormatException.class})
     protected ResponseEntity<Object> handleTypeMismatch(
-            TypeMismatchException ex, WebRequest request
+            Exception ex, WebRequest request
     ) {
-        String bodyOfResponse = "Bitch thats no good";
+        String bodyOfResponse = "Bitch that's no good";
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 

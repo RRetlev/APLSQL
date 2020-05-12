@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class SelectQueryStringParser {
 
     public static String parseTableName(String queryString){
-        Pattern p = Pattern.compile(".*?\\bfrom\\s+(\\w+)\\b.*");
+        Pattern p = Pattern.compile(".*?\\bFROM\\s+(\\w+)\\b.*");
         Matcher m = p.matcher(queryString);
         if (m.find()){
             return m.group(1);
@@ -17,7 +17,7 @@ public class SelectQueryStringParser {
     }
 
     public static List<String> parseColumnNames(String s){
-        Pattern p = Pattern.compile(".*?\\bSELECT\\s+(\\S+)\\b.*");
+        Pattern p = Pattern.compile(".*?\\bSELECT\\s+(\\S+)\\s.*");
         Matcher m = p.matcher(s);
         String columnNameString = null;
         if (m.find()){

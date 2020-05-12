@@ -1,6 +1,7 @@
 package com.mastery.aplsql.service;
 
 import com.mastery.aplsql.model.Column;
+import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.Types;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Util {
-    public static boolean containsName(Set<String> set,String name){
+    public static boolean containsName(List<String> set,String name){
         return set.contains(name);
     }
 
@@ -35,5 +36,42 @@ public class Util {
                 break;
         }
         return type;
+    }
+
+    public static OperatorBehaviour decideOperation(String operator){
+        OperatorBehaviour behaviour;
+        switch (operator){
+            case "=":
+                behaviour = OperatorBehaviour.EQUAL;
+                break;
+            case ">":
+                behaviour = OperatorBehaviour.GREATERTHAN;
+                break;
+            case "<":
+                behaviour = OperatorBehaviour.LESSTHAN;
+                break;
+            case ">=":
+                behaviour = OperatorBehaviour.GREATEROREQUAL;
+                break;
+            case "<=":
+                behaviour = OperatorBehaviour.LESSOREQUAL;
+                break;
+            case "<>":
+            case "!=":
+                behaviour = OperatorBehaviour.NOTEQUAL;
+                break;
+            case "BETWEEN":
+                behaviour = OperatorBehaviour.BETWEEN;
+                break;
+            case "LIKE":
+                behaviour = OperatorBehaviour.LIKE;
+                break;
+            case "IN":
+                behaviour = OperatorBehaviour.IN;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + operator);
+        }
+        return behaviour;
     }
 }
