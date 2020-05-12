@@ -20,7 +20,7 @@ public class IntegrationTests {
 
     @Test
     void TableCreatedFromQueryString() throws Exception {
-        String s = "CREATE table pipacs(ID int)";
+        String s = "CREATE TABLE pipacs(ID int)";
         Table table = storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(s)));
         table.insertColumns(CreateQueryStringParser.getColumnSpecs(s));
         Assertions.assertEquals(new TableProperties("pipacs"),storage.getTablePropertiesByName("pipacs"));
