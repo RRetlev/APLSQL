@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class CreateQueryStringParser {
     public static String parseTableName(String queryString){
-        Pattern p = Pattern.compile(".*?\\btable\\s+(\\w+)\\b.*");
+        Pattern p = Pattern.compile("CREATE TABLE\\s+(\\w+)\\b.*");
         Matcher m = p.matcher(queryString);
         if (m.find()){
             return m.group(1);

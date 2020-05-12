@@ -26,7 +26,7 @@ public class IntegrationTests {
 
     @Test
     void TableCreatedFromQueryString() throws Exception {
-        String s = "CREATE table pipacs(ID int)";
+        String s = "CREATE TABLE pipacs(ID int)";
         Table table = storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(s)));
         table.insertColumns(CreateQueryStringParser.getColumnSpecs(s));
         Assertions.assertEquals(new TableProperties("pipacs"), storage.getTablePropertiesByName("pipacs"));
@@ -34,7 +34,7 @@ public class IntegrationTests {
 
     @Test
     void DataInsertedFromQuery() throws Exception {
-        String s = "Insert INTO test(name) VALUES (Jack)";
+        String s = "INSERT INTO test(name) VALUES (Jack)";
         Table table = storage.insertTable(new TableProperties("test"));
         Column column = table.insertColumn(new ColumnProperties("name", Types.STRING));
         table.insertRecords(InsertQueryStringParser.parseInsertValues(s));
@@ -43,7 +43,7 @@ public class IntegrationTests {
 
     @Test
     void MultipleDataInsertedFromQuery() throws Exception {
-        String s = "Insert INTO test(name, age) VALUES (Jack,6)";
+        String s = "INSERT INTO test(name, age) VALUES (Jack,6)";
         Table table = storage.insertTable(new TableProperties("test"));
         Column column = table.insertColumn(new ColumnProperties("name", Types.STRING));
         Column columnb = table.insertColumn(new ColumnProperties("age", Types.INTEGER));

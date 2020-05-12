@@ -17,20 +17,20 @@ public class StringParserTests {
 
     @Test
     void isCrateTableNameRetrieved(){
-        String s= "CREATE table dirrdurr";
+        String s= "CREATE TABLE dirrdurr";
         Assertions.assertEquals("dirrdurr", CreateQueryStringParser.parseTableName(s));
     }
 
     @Test
     void oneCreateParameterParsed(){
-        String s= "CREATE table dirrdurr(col string)";
+        String s= "CREATE TABLE dirrdurr(col string)";
         Map<String,String>map = Map.of("col","string");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
     }
 
     @Test
     void multipleCreateParametersParsed(){
-        String s= "CREATE table dirrdurr(col string , other string , another int)";
+        String s= "CREATE TABLE dirrdurr(col string , other string , another int)";
         Map<String,String>map = Map.of("col","string","other","string","another","int");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
     }
