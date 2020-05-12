@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Util {
-    public static boolean containsName(Set<String> set,String name){
+    public static boolean containsName(List<String> set,String name){
         return set.contains(name);
     }
 

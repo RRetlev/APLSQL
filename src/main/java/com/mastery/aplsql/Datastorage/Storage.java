@@ -12,7 +12,7 @@ import java.util.*;
 @Data
 public class Storage {
     private HashMap<TableProperties, Table> DB = new HashMap<>();
-    private Set<String> tableNames = new HashSet<>();
+    private List<String> tableNames = new ArrayList<>();
 
     public Table insertTable(TableProperties tableProperties) throws DuplicateEntryException {
         if (!Util.containsName(tableNames, tableProperties.getName())) {

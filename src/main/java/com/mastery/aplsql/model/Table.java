@@ -11,12 +11,12 @@ import java.util.stream.IntStream;
 @Data
 public class Table {
     private LinkedHashMap<ColumnProperties, Column> columns;
-    private Set<String> columnNames;
+    private List<String> columnNames;
     private int idPointer;
 
     public Table() {
         this.columns = new LinkedHashMap<>();
-        this.columnNames = new HashSet<>();
+        this.columnNames = new ArrayList<>();
         this.idPointer = 0;
     }
 
@@ -51,17 +51,21 @@ public class Table {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public void insertRecords(Map<String, String> map){
+    public void insertRecords(Map<String, String> map) throws TypeMismatchException{
         map.forEach(ThrowingBiConsumer.unchecked((key, value) -> getColumnByName(key).addDataToColumn(getColumnPropertiesByName(key).getDataType().convert(value))));
         idPointer++;
     }
 
     public List<List<String>> selectRecords(List<String> columnNames) {
         List<List<String>> queryResult = new ArrayList<>();
+        if (columnNames.size() == 1 && columnNames.get(0).equals("*")){
+            columnNames = new ArrayList<>(this.columnNames);
+        }
         queryResult.add(columnNames);
+        List<String> finalColumnNames = columnNames;
         List<Column> columnsFromSelect = columns.entrySet()
                 .stream()
-                .filter(columnPropertiesColumnEntry -> columnNames.contains(columnPropertiesColumnEntry.getKey().getName()))
+                .filter(columnPropertiesColumnEntry -> finalColumnNames.contains(columnPropertiesColumnEntry.getKey().getName()))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
         // TODO IntStream

@@ -17,7 +17,7 @@ public class SelectQueryStringParser {
     }
 
     public static List<String> parseColumnNames(String s){
-        Pattern p = Pattern.compile(".*?\\bSELECT\\s+(\\S+)\\b.*");
+        Pattern p = Pattern.compile(".*?\\bSELECT\\s+(\\S+)\\s.*");
         Matcher m = p.matcher(s);
         String columnNameString = null;
         if (m.find()){
