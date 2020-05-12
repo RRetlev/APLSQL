@@ -127,4 +127,10 @@ class AplsqlApplicationTests {
         Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names));
     }
 
+    @Test
+    void tableDropped() throws EntityNotFoundException {
+        storage.dropTable("testTable");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> storage.getTablePropertiesByName("testTable"));
+    }
+
 }

@@ -63,9 +63,7 @@ public class IntegrationTests {
         table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
         Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(SelectQueryStringParser.parseColumnNames(s)));
-
     }
-
 
 }
 

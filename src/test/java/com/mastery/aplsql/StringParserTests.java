@@ -1,14 +1,13 @@
 package com.mastery.aplsql;
 
 import com.mastery.aplsql.service.CreateQueryStringParser;
+import com.mastery.aplsql.service.DropTableQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +63,12 @@ public class StringParserTests {
         String s = "SELECT alma,körte,szilva from testTable";
         List<String> list = List.of("alma","körte","szilva");
         Assertions.assertEquals(list, SelectQueryStringParser.parseColumnNames(s));
+    }
+
+    @Test
+    void droppedTableNameParsed() {
+        String s = "DROP TABLE students";
+        Assertions.assertEquals("students", DropTableQueryStringParser.parseTableName(s));
     }
 
 
