@@ -35,7 +35,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     protected ResponseEntity<Object> handleTypeMismatch(
             Exception ex, WebRequest request
     ) {
-        String bodyOfResponse = "Bitch that's no good";
+        String bodyOfResponse = "Type no good bruh";
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 

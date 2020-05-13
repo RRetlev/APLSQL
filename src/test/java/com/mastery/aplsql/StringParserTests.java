@@ -1,5 +1,6 @@
 package com.mastery.aplsql;
 
+import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.service.CreateQueryStringParser;
 import com.mastery.aplsql.service.DropTableQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
@@ -63,6 +64,12 @@ public class StringParserTests {
         String s = "SELECT alma,körte,szilva from testTable";
         List<String> list = List.of("alma","körte","szilva");
         Assertions.assertEquals(list, SelectQueryStringParser.parseColumnNames(s));
+    }
+
+    @Test
+    void extractWhereOperator(){
+        String s = "SELECT alma FROM test WHERE col = 2";
+        Assertions.assertEquals(OperatorBehaviour.EQUAL,SelectQueryStringParser.parseWhereCondition(s));
     }
 
     @Test
