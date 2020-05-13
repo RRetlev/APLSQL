@@ -38,7 +38,7 @@ public class SelectQueryStringParser {
         return null;
     }
 
-    public static Object getOperandFromWhereCondition(String queryString){
+    public static String getOperandFromWhereCondition(String queryString){
         Pattern p = Pattern.compile("\\s(\\w+)$");
         Matcher m = p.matcher(queryString.trim());
         if(m.find()){

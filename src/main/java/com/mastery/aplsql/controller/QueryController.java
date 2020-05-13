@@ -45,7 +45,7 @@ public class QueryController {
         log.info(query.getQueryString());
         String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
         List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
-        return storage.getTableByName(tableName).selectRecords(columnNames);
+        return storage.getTableByName(tableName).selectRecords(query.getQueryString());
         // TODO : Create response entity.
     }
 
@@ -62,7 +62,7 @@ public class QueryController {
 
     @PutMapping("/update")
     public List<String> updateRecord(@RequestBody Query query) {
-        System.out.println(query.getQueryString());
+        log.info(query.getQueryString());
         return null;
     }
 

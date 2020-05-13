@@ -1,6 +1,7 @@
 package com.mastery.aplsql.model;
 
 import com.mastery.aplsql.exceptionhandling.*;
+import com.mastery.aplsql.service.SelectQueryStringParser;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
@@ -56,21 +57,34 @@ public class Table {
         idPointer++;
     }
 
-    public List<List<String>> selectRecords(List<String> columnNames) {
+    public List<List<String>> selectRecords(String queryString) {
+        List<String> columnNamesFormQuery = SelectQueryStringParser.parseColumnNames(queryString);
         List<List<String>> queryResult = new ArrayList<>();
-        if (columnNames.size() == 1 && columnNames.get(0).equals("*")){
-            columnNames = new ArrayList<>(this.columnNames);
+        if (columnNamesFormQuery.size() == 1 && columnNamesFormQuery.get(0).equals("*")){
+            columnNamesFormQuery = new ArrayList<>(this.columnNames);
         }
-        queryResult.add(columnNames);
-        List<String> finalColumnNames = columnNames;
+        queryResult.add(columnNamesFormQuery);
+        List<String> finalColumnNamesFormQuery = columnNamesFormQuery;
         List<Column> columnsFromSelect = columns.entrySet()
                 .stream()
-                .filter(columnPropertiesColumnEntry -> finalColumnNames.contains(columnPropertiesColumnEntry.getKey().getName()))
+                .filter(columnPropertiesColumnEntry -> finalColumnNamesFormQuery.contains(columnPropertiesColumnEntry.getKey().getName()))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
-        // TODO IntStream
+//        List<Integer> correctRecordIndices = IntStream.range(0,idPointer).filter(i -> {
+//            try {
+//                return SelectQueryStringParser.parseWhereCondition(queryString).evaluateCondition(getColumnByName(SelectQueryStringParser.parseColumnNameFromWhereCondition(queryString)).getDataAtIndex(i).toString(),SelectQueryStringParser.getOperandFromWhereCondition(queryString));
+//            } catch (EntityNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            return false;
+//        }).boxed().collect(Collectors.toList()) ;
+
+
+
         IntStream.range(0,idPointer)
-                .forEach(i -> queryResult.add(columnsFromSelect.stream().map(col -> col.getDataAtIndex(i).toString()).collect(Collectors.toList())));
+                .forEach(i -> queryResult.add(columnsFromSelect.stream()
+                        .map(col -> col.getDataAtIndex(i).toString())
+                        .collect(Collectors.toList())));
         return queryResult;
     }
 }

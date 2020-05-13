@@ -78,5 +78,17 @@ public class StringParserTests {
         Assertions.assertEquals("students", DropTableQueryStringParser.parseTableName(s));
     }
 
+    @Test
+    void extractOperandFromWhere(){
+        String s = "SELECT alma FROM test WHERE col = 2";
+        Assertions.assertEquals("2",SelectQueryStringParser.getOperandFromWhereCondition(s));
+    }
+
+    @Test
+    void extractColumnNameFromWhere(){
+        String s = "SELECT alma FROM test WHERE col = 2";
+        Assertions.assertEquals("col",SelectQueryStringParser.parseColumnNameFromWhereCondition(s));
+    }
+
 
 }
