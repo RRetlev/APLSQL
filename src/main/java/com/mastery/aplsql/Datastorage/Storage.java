@@ -8,6 +8,8 @@ import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Data
 public class Storage {
@@ -22,6 +24,11 @@ public class Storage {
             return table;
         }
         throw new DuplicateEntryException();
+    }
+
+    public void dropTable(String name) throws EntityNotFoundException {
+        DB.remove(getTablePropertiesByName(name));
+        tableNames.remove(name);
     }
 
 

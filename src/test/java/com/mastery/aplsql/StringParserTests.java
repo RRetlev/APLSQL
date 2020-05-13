@@ -2,14 +2,13 @@ package com.mastery.aplsql;
 
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.service.CreateQueryStringParser;
+import com.mastery.aplsql.service.DropTableQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,20 +17,20 @@ public class StringParserTests {
 
     @Test
     void isCrateTableNameRetrieved(){
-        String s= "CREATE table dirrdurr";
+        String s= "CREATE TABLE dirrdurr";
         Assertions.assertEquals("dirrdurr", CreateQueryStringParser.parseTableName(s));
     }
 
     @Test
     void oneCreateParameterParsed(){
-        String s= "CREATE table dirrdurr(col string)";
+        String s= "CREATE TABLE dirrdurr(col string)";
         Map<String,String>map = Map.of("col","string");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
     }
 
     @Test
     void multipleCreateParametersParsed(){
-        String s= "CREATE table dirrdurr(col string , other string , another int)";
+        String s= "CREATE TABLE dirrdurr(col string , other string , another int)";
         Map<String,String>map = Map.of("col","string","other","string","another","int");
         Assertions.assertEquals(map,CreateQueryStringParser.getColumnSpecs(s));
     }
@@ -71,6 +70,12 @@ public class StringParserTests {
     void extractWhereOperator(){
         String s = "SELECT alma FROM test WHERE col = 2";
         Assertions.assertEquals(OperatorBehaviour.EQUAL,SelectQueryStringParser.parseWhereCondition(s));
+    }
+
+    @Test
+    void droppedTableNameParsed() {
+        String s = "DROP TABLE students";
+        Assertions.assertEquals("students", DropTableQueryStringParser.parseTableName(s));
     }
 
 

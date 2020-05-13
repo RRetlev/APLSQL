@@ -8,6 +8,7 @@ import com.mastery.aplsql.model.Query;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.CreateQueryStringParser;
+import com.mastery.aplsql.service.DropTableQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import lombok.extern.slf4j.Slf4j;
@@ -56,5 +57,13 @@ public class QueryController {
     public List<String> updateRecord(@RequestBody Query query) {
         System.out.println(query.getQueryString());
         return null;
+    }
+
+    @DeleteMapping("/drop-table")
+    public String dropTable(@RequestBody Query query) throws EntityNotFoundException {
+        log.info(query.getQueryString());
+        String tableName = DropTableQueryStringParser.parseTableName(query.getQueryString());
+        storage.dropTable(tableName);
+        return "The table '" + tableName + "' has been dropped.";
     }
 }
