@@ -1,5 +1,7 @@
 package com.mastery.aplsql.service;
 
+import com.mastery.aplsql.model.OperatorBehaviour;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,5 +27,32 @@ public class SelectQueryStringParser {
         }
         return Arrays.asList(columnNameString.split(","));
 
+    }
+
+    public static OperatorBehaviour parseWhereCondition(String queryString){
+        Pattern p = Pattern.compile(".*?\\bWHERE\\s+\\w+\\s+(.).*");
+        Matcher m = p.matcher(queryString.trim());
+        if(m.find()){
+            return Util.decideOperation(m.group(1));
+        }
+        return null;
+    }
+
+    public static Object getOperandFromWhereCondition(String queryString){
+        Pattern p = Pattern.compile("\\s(\\w+)$");
+        Matcher m = p.matcher(queryString.trim());
+        if(m.find()){
+            return m.group(1);
+        }
+        return null;
+    }
+
+    public static String parseColumnNameFromWhereCondition(String queryString){
+        Pattern p = Pattern.compile(".*?\\bWHERE\\s+(\\w+)\\b.*");
+        Matcher m = p.matcher(queryString);
+        if (m.find()){
+            return m.group(1);
+        }
+        return null;
     }
 }

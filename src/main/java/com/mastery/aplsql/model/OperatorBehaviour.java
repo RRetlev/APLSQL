@@ -40,19 +40,21 @@ public enum OperatorBehaviour {
     BETWEEN(){
         @Override
         public boolean evaluateCondition(String data, String operand){
-
+            //TODO Parsing the operand splitting it into two integer value
             return true;
         }
     },
     LIKE(){
         @Override
         public boolean evaluateCondition(String data, String operand){
+            //TODO search for regex matcher
             return true;
         }
     },
     IN(){
         @Override
         public boolean evaluateCondition(String data, String operand){
+            //TODO Parsing the operand Splitting it into a list then check for contains
             return true;
         }
     };
