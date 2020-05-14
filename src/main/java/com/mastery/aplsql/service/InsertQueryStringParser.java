@@ -7,22 +7,24 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InsertQueryStringParser extends QueryStringParser{
+public class InsertQueryStringParser extends QueryStringParser {
 
     //TODO java regex stream
-    public static Map<String,String> parseInsertValues(String queryString){
-        Pattern p = Pattern.compile("\\((.*?)\\)");
+    public static Map<String, String> parseInsertValues(String queryString) {
+        Pattern p = Pattern.compile("\\((.*)\\)\\s+VALUES\\s+\\((.*)\\)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
-        List<String> props = new ArrayList<>();
-        while (m.find()){
-            props.add(m.group(1));
+        if (!m.find()) return null;
+
+        List<String> insertProps = List.of(m.group(1), m.group(2));
+
+        String[] columns = insertProps.get(0).split("[\\s,]+");
+        String[] values = insertProps.get(1).split("[\\s,]+");
+        if (columns.length != values.length) return null;
+
+        Map<String, String> insertMap = new HashMap<>();
+        for (int i = 0; i < columns.length; i++) {
+            insertMap.put(columns[i], values[i]);
         }
-        Map<String,String> map = new HashMap<>();
-        String[] arr1 = props.get(0).split("[\\s,]+");
-        String[] arr2 = props.get(1).split("[\\s,]+");
-        for (int i = 0; i < arr1.length ; i++) {
-            map.put(arr1[i],arr2[i]);
-        }
-        return map;
+        return insertMap;
     }
 }

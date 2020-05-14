@@ -43,16 +43,14 @@ public class StringParserTests {
 
     @Test
     void oneInsertParameterParsed() {
-        String s = "INSERT INTO test (name)" +
-                "VALUES (Jack)";
+        String s = "INSERT INTO test (name) VALUES (Jack)";
         Map<String, String> map = Map.of("name", "Jack");
         Assertions.assertEquals(map, InsertQueryStringParser.parseInsertValues(s));
     }
 
     @Test
     void multipleInsertParameterParsed() {
-        String s = "INSERT INTO test (name, age, color)" +
-                "VALUES (Jack, 2, blue)";
+        String s = "INSERT INTO test (name, age, color) VALUES (Jack, 2, blue)";
         Map<String, String> map = Map.of("name", "Jack", "age", "2", "color", "blue");
         Assertions.assertEquals(map, InsertQueryStringParser.parseInsertValues(s));
 

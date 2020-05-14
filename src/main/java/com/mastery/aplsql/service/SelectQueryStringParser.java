@@ -13,7 +13,7 @@ public class SelectQueryStringParser extends  QueryStringParser{
         Pattern p = Pattern.compile("\\bSELECT\\s+(.{2,})\\sFROM\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
         if (!m.find()) return null;
-        String[] columnNames = m.group(1).split("[, ]+");
+        String[] columnNames = m.group(1).split("[\\s,]+");
         return Arrays.asList(columnNames);
     }
 

@@ -13,8 +13,8 @@ public class CreateQueryStringParser extends QueryStringParser {
         if (!m.find()) return null;
         String parameters = m.group(1);
         HashMap<String, String> paramMap = new HashMap<>();
-        Arrays.stream(parameters.split(", "))
-                .map(param -> param.split(" "))
+        Arrays.stream(parameters.split(",\\s"))
+                .map(param -> param.split("\\s"))
                 .forEach(paramArr -> paramMap.put(paramArr[0], paramArr[1]));
         return paramMap;
     }
