@@ -7,9 +7,9 @@ import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
-import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Data
 public class Storage {

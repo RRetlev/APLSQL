@@ -7,15 +7,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InsertQueryStringParser {
-    public static String parseTableName(String queryString){
-        Pattern p = Pattern.compile("INSERT INTO\\s+(\\w+)\\b.*");
-        Matcher m = p.matcher(queryString);
-        if (m.find()){
-            return m.group(1);
-        }
-        return null;
-    }
+public class InsertQueryStringParser extends QueryStringParser{
+
     //TODO java regex stream
     public static Map<String,String> parseInsertValues(String queryString){
         Pattern p = Pattern.compile("\\((.*?)\\)");

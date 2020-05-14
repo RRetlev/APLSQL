@@ -54,7 +54,7 @@ public class IntegrationTests {
 
     @Test
     void SelectQueryReturnsAllTheColumnsOnStar() throws DuplicateEntryException, TypeMismatchException {
-        String s = "SELECT * from test";
+        List<String> l = List.of("*");
         List<String> names = List.of("testColumn", "alma", "körte");
         Table table = storage.insertTable(new TableProperties("test"));
         table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
@@ -62,7 +62,7 @@ public class IntegrationTests {
         table.insertColumn(new ColumnProperties("körte", Types.STRING));
         table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(s));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(l));
     }
 
 }

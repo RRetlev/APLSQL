@@ -118,13 +118,13 @@ class AplsqlApplicationTests {
     }
 
     @Test
-    void SelectQueriResultCorrectorder() throws Exception {
+    void SelectQueryResultCorrectOrder() throws Exception {
         List<String> names = List.of("testColumn", "alma", "körte");
         table.insertColumn(new ColumnProperties("alma", Types.STRING));
         table.insertColumn(new ColumnProperties("körte", Types.STRING));
         table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names.toString()));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names));
     }
 
     @Test

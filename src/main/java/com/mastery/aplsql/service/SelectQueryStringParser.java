@@ -7,29 +7,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SelectQueryStringParser {
-
-    public static String parseTableName(String queryString){
-        Pattern p = Pattern.compile(".*?\\bFROM\\s+(\\w+)\\b.*");
-        Matcher m = p.matcher(queryString);
-        if (m.find()){
-            return m.group(1);
-        }
-        return null;
-    }
+public class SelectQueryStringParser extends  QueryStringParser{
 
     public static List<String> parseColumnNames(String s){
-        Pattern p = Pattern.compile(".*?\\bSELECT\\s+(\\S+)\\s.*");
+        Pattern p = Pattern.compile("\\bSELECT\\s+(.{2,})\\sFROM\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
-        String columnNameString = null;
-        if (m.find()){
-             columnNameString = m.group(1);
-        }
-        return Arrays.asList(columnNameString.split(","));
-
+        if (!m.find()) return null;
+        String[] columnNames = m.group(1).split("[, ]+");
+        return Arrays.asList(columnNames);
     }
 
-    public static OperatorBehaviour parseWhereCondition(String queryString){
+    public static OperatorBehaviour parseWhereConditionOperator(String queryString){
         Pattern p = Pattern.compile(".*?\\bWHERE\\s+\\w+\\s+(.).*");
         Matcher m = p.matcher(queryString.trim());
         if(m.find()){

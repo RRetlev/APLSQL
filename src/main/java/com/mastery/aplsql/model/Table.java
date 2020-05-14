@@ -52,24 +52,26 @@ public class Table {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public void insertRecords(Map<String, String> map) throws TypeMismatchException{
+    public void insertRecords(Map<String, String> map) {
         map.forEach(ThrowingBiConsumer.unchecked((key, value) -> getColumnByName(key).addDataToColumn(getColumnPropertiesByName(key).getDataType().convert(value))));
         idPointer++;
     }
 
-    public List<List<String>> selectRecords(String queryString) {
-        List<String> columnNamesFormQuery = SelectQueryStringParser.parseColumnNames(queryString);
+    public List<List<String>> selectRecords(List<String> columnNames) {
         List<List<String>> queryResult = new ArrayList<>();
-        if (columnNamesFormQuery.size() == 1 && columnNamesFormQuery.get(0).equals("*")){
-            columnNamesFormQuery = new ArrayList<>(this.columnNames);
+
+        if (columnNames.size() == 1 && columnNames.get(0).equals("*")){
+            columnNames = new ArrayList<>(this.columnNames);
         }
-        queryResult.add(columnNamesFormQuery);
-        List<String> finalColumnNamesFormQuery = columnNamesFormQuery;
+        queryResult.add(columnNames);
+
+        List<String> finalColumnNamesFormQuery = columnNames;
         List<Column> columnsFromSelect = columns.entrySet()
                 .stream()
                 .filter(columnPropertiesColumnEntry -> finalColumnNamesFormQuery.contains(columnPropertiesColumnEntry.getKey().getName()))
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
+
 //        List<Integer> correctRecordIndices = IntStream.range(0,idPointer).filter(i -> {
 //            try {
 //                return SelectQueryStringParser.parseWhereCondition(queryString).evaluateCondition(getColumnByName(SelectQueryStringParser.parseColumnNameFromWhereCondition(queryString)).getDataAtIndex(i).toString(),SelectQueryStringParser.getOperandFromWhereCondition(queryString));
@@ -79,12 +81,11 @@ public class Table {
 //            return false;
 //        }).boxed().collect(Collectors.toList()) ;
 
-
-
         IntStream.range(0,idPointer)
                 .forEach(i -> queryResult.add(columnsFromSelect.stream()
                         .map(col -> col.getDataAtIndex(i).toString())
                         .collect(Collectors.toList())));
+
         return queryResult;
     }
 }
