@@ -52,12 +52,13 @@ public class Table {
                 .orElseThrow(EntityNotFoundException::new);
     }
 
-    public void insertRecords(Map<String, String> map) {
+    public void insertRecords(Map<String, String> map) throws EntityNotFoundException, TypeMismatchException {
         map.forEach(ThrowingBiConsumer.unchecked((key, value) -> getColumnByName(key).addDataToColumn(getColumnPropertiesByName(key).getDataType().convert(value))));
+        getColumnByName("id").addDataToColumn(idPointer);
         idPointer++;
     }
 
-    public List<List<String>> selectRecords(List<String> columnNames) {
+    public List<List<String>> selectRecords(List<String> columnNames, WhereCondition condition) {
         List<List<String>> queryResult = new ArrayList<>();
 
         if (columnNames.size() == 1 && columnNames.get(0).equals("*")){
@@ -72,20 +73,19 @@ public class Table {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 
-//        List<Integer> correctRecordIndices = IntStream.range(0,idPointer).filter(i -> {
-//            try {
-//                return SelectQueryStringParser.parseWhereCondition(queryString).evaluateCondition(getColumnByName(SelectQueryStringParser.parseColumnNameFromWhereCondition(queryString)).getDataAtIndex(i).toString(),SelectQueryStringParser.getOperandFromWhereCondition(queryString));
-//            } catch (EntityNotFoundException e) {
-//                e.printStackTrace();
-//            }
-//            return false;
-//        }).boxed().collect(Collectors.toList()) ;
+        List<Integer> correctRecordIndices = IntStream.range(0,idPointer).filter(i -> {
+            try {
+                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(),condition.getValue());
+            } catch (EntityNotFoundException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }).boxed().collect(Collectors.toList()) ;
 
-        IntStream.range(0,idPointer)
+        correctRecordIndices
                 .forEach(i -> queryResult.add(columnsFromSelect.stream()
                         .map(col -> col.getDataAtIndex(i).toString())
                         .collect(Collectors.toList())));
-
         return queryResult;
     }
 }

@@ -77,7 +77,7 @@ class AplsqlApplicationTests {
     void columnCreated() throws Exception {
         table.insertColumn(new ColumnProperties("kutya", Types.STRING));
         table.insertColumn(new ColumnProperties("cica", Types.STRING));
-        Assertions.assertEquals(3, table.getColumns().size());
+        Assertions.assertEquals(4, table.getColumns().size());
     }
 
     @Test
@@ -124,7 +124,7 @@ class AplsqlApplicationTests {
         table.insertColumn(new ColumnProperties("körte", Types.STRING));
         table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names,new WhereCondition()));
     }
 
     @Test

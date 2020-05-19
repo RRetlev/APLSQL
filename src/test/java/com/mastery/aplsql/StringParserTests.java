@@ -1,6 +1,7 @@
 package com.mastery.aplsql;
 
 import com.mastery.aplsql.model.OperatorBehaviour;
+import com.mastery.aplsql.model.WhereCondition;
 import com.mastery.aplsql.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,7 @@ public class StringParserTests {
     @Test
     void testNewParserWhere() {
         String s = "SELECT * FROM table WHERE col = 5";
-        Assertions.assertEquals(List.of("col", "=", "5"), QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals(new WhereCondition("col",OperatorBehaviour.EQUAL, "5"), QueryStringParser.parseWhereCondition(s));
     }
 
     @ParameterizedTest

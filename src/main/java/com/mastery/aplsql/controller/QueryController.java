@@ -48,8 +48,7 @@ public class QueryController {
         String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
         List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
         if (columnNames == null) throw new EntityNotFoundException();
-        return storage.getTableByName(tableName).selectRecords(columnNames);
-        // TODO : Create response entity.
+        return storage.getTableByName(tableName).selectRecords(columnNames,QueryStringParser.parseWhereCondition(query.getQueryString()));
     }
 
     @PostMapping("/insert")

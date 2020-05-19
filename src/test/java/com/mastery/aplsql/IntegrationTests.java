@@ -2,10 +2,12 @@ package com.mastery.aplsql;
 
 import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
+import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.CreateQueryStringParser;
 import com.mastery.aplsql.service.InsertQueryStringParser;
+import com.mastery.aplsql.service.QueryStringParser;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,16 +55,31 @@ public class IntegrationTests {
     }
 
     @Test
-    void SelectQueryReturnsAllTheColumnsOnStar() throws DuplicateEntryException, TypeMismatchException {
+    void SelectQueryReturnsAllTheColumnsOnStar() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
         List<String> l = List.of("*");
-        List<String> names = List.of("testColumn", "alma", "körte");
+        List<String> names = List.of("id","testColumn", "alma", "körte");
         Table table = storage.insertTable(new TableProperties("test"));
         table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
         table.insertColumn(new ColumnProperties("alma", Types.STRING));
         table.insertColumn(new ColumnProperties("körte", Types.STRING));
         table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(l));
+        Assertions.assertEquals(List.of(names, List.of("0","first", "pos", "fruit"), List.of("1","second", "trash", "veggie")), table.selectRecords(l,new WhereCondition()));
+    }
+
+    @Test
+    void SelectQueryWithWereCondition() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+        String s = "SELECT * FROM table WHERE name = alma";
+        List<String> names = List.of("id","testColumn", "name", "age");
+        Table table = storage.insertTable(new TableProperties("table"));
+        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
+        table.insertColumn(new ColumnProperties("name", Types.STRING));
+        table.insertColumn(new ColumnProperties("age", Types.STRING));
+        table.insertRecords(Map.of("testColumn", "first", "name", "alma", "age", "fruit"));
+        table.insertRecords(Map.of("testColumn", "second", "name", "JAck", "age", "veggie"));
+        table.insertRecords(Map.of("testColumn", "third", "name", "alma", "age", "trash"));
+        Assertions.assertEquals(List.of(names,List.of("0","first","alma","fruit"),List.of("2","third","alma","trash")),table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+
     }
 
 }

@@ -2,8 +2,10 @@ package com.mastery.aplsql.Datastorage;
 
 import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
+import com.mastery.aplsql.model.ColumnProperties;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
+import com.mastery.aplsql.model.Types;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
 
@@ -21,6 +23,7 @@ public class Storage {
             Table table = new Table();
             tableNames.add(tableProperties.getName());
             DB.put(tableProperties, table);
+            table.insertColumn(new ColumnProperties("id", Types.INTEGER));
             return table;
         }
         throw new DuplicateEntryException();
