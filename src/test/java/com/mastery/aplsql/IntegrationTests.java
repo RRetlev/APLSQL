@@ -81,6 +81,20 @@ public class IntegrationTests {
         Assertions.assertEquals(List.of(names,List.of("0","first","alma","fruit"),List.of("2","third","alma","trash")),table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
 
     }
+    @Test
+    void SelectQueryWithoutWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+        String s = "SELECT * FROM table";
+        List<String> names = List.of("id","testColumn", "name", "age");
+        Table table = storage.insertTable(new TableProperties("table"));
+        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
+        table.insertColumn(new ColumnProperties("name", Types.STRING));
+        table.insertColumn(new ColumnProperties("age", Types.STRING));
+        table.insertRecords(Map.of("testColumn", "first", "name", "alma", "age", "fruit"));
+        table.insertRecords(Map.of("testColumn", "second", "name", "JAck", "age", "veggie"));
+        table.insertRecords(Map.of("testColumn", "third", "name", "alma", "age", "trash"));
+        Assertions.assertEquals(List.of(names,List.of("0","first","alma","fruit"),List.of("1","second","JAck","veggie"),List.of("2","third","alma","trash")),table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+
+    }
 
 }
 

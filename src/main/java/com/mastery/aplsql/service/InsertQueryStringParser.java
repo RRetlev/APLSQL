@@ -14,9 +14,7 @@ public class InsertQueryStringParser extends QueryStringParser {
         Pattern p = Pattern.compile("\\((.*)\\)\\s+VALUES\\s+\\((.*)\\)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
         if (!m.find()) return null;
-
         List<String> insertProps = List.of(m.group(1), m.group(2));
-
         String[] columns = insertProps.get(0).split("[\\s,]+");
         String[] values = insertProps.get(1).split("[\\s,]+");
         if (columns.length != values.length) return null;

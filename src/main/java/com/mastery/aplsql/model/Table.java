@@ -41,7 +41,7 @@ public class Table {
     }
 
     public void insertColumns(HashMap<String, String> columnSpecs) {
-        columnSpecs.forEach( ThrowingBiConsumer.unchecked((key,value) -> insertColumn(new ColumnProperties(key, Util.getDataTypeFromString(value)))));
+        columnSpecs.forEach(ThrowingBiConsumer.unchecked((key, value) -> insertColumn(new ColumnProperties(key, Util.getDataTypeFromString(value)))));
     }
 
     public ColumnProperties getColumnPropertiesByName(String name) throws EntityNotFoundException {
@@ -61,11 +61,10 @@ public class Table {
     public List<List<String>> selectRecords(List<String> columnNames, WhereCondition condition) {
         List<List<String>> queryResult = new ArrayList<>();
 
-        if (columnNames.size() == 1 && columnNames.get(0).equals("*")){
+        if (columnNames.size() == 1 && columnNames.get(0).equals("*")) {
             columnNames = new ArrayList<>(this.columnNames);
         }
         queryResult.add(columnNames);
-
         List<String> finalColumnNamesFormQuery = columnNames;
         List<Column> columnsFromSelect = columns.entrySet()
                 .stream()
@@ -73,19 +72,38 @@ public class Table {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 
-        List<Integer> correctRecordIndices = IntStream.range(0,idPointer).filter(i -> {
+        List<Integer> correctRecordIndices = IntStream.range(0, idPointer).filter(i -> {
             try {
-                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(),condition.getValue());
+                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
             } catch (EntityNotFoundException e) {
                 e.printStackTrace();
             }
             return false;
-        }).boxed().collect(Collectors.toList()) ;
+        })
+                .boxed()
+                .collect(Collectors.toList());
 
         correctRecordIndices
                 .forEach(i -> queryResult.add(columnsFromSelect.stream()
                         .map(col -> col.getDataAtIndex(i).toString())
                         .collect(Collectors.toList())));
         return queryResult;
+    }
+
+    public List<String> updateRecord(LinkedHashMap<String,String> values,WhereCondition condition) {
+        List<Integer> correctRecordIndices = IntStream.range(0, idPointer).filter(i -> {
+            try {
+                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
+            } catch (EntityNotFoundException e) {
+                e.printStackTrace();
+            }
+            return false;
+        })
+                .boxed()
+                .collect(Collectors.toList());
+        List<String> columnNames = new ArrayList<>(values.keySet());
+        correctRecordIndices.stream().map((i -> columnNames.stream().map(name -> getColumnByName(name).setDataAtIndex(i,values.get(name))).collect(Collectors.toList())));
+
+        return null;
     }
 }

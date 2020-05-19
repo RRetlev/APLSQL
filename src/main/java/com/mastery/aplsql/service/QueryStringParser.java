@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public abstract class QueryStringParser {
 
     public static String parseTableName(String queryString) {
-        Pattern p = Pattern.compile("\\b(?:FROM|INSERT INTO|DROP TABLE|CREATE TABLE)\\s(\\w+)\\b", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("\\b(?:FROM|INSERT INTO|UPDATE|DROP TABLE|CREATE TABLE)\\s(\\w+)\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
         if (!m.find()) return null;
         return m.group(1);

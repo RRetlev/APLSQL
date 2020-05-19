@@ -99,4 +99,10 @@ public class StringParserTests {
         Assertions.assertEquals("table", QueryStringParser.parseTableName(queryString));
     }
 
+    @Test
+    void getUpdateValues(){
+        String s = "UPDATE table SET name = Jack, surname = Carl WHERE name = Jack";
+        Assertions.assertEquals(Map.of("name","Jack","surname","Carl"),UpdateQueryStringParser.getUpdateParameters(s));
+    }
+
 }
