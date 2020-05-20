@@ -72,18 +72,8 @@ public class Table {
                 .map(Map.Entry::getValue)
                 .collect(Collectors.toList());
 
-        List<Integer> correctRecordIndices = IntStream.range(0, idPointer).filter(i -> {
-            try {
-                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
-            } catch (EntityNotFoundException e) {
-                e.printStackTrace();
-            }
-            return false;
-        })
-                .boxed()
-                .collect(Collectors.toList());
-
-        correctRecordIndices
+        List<Integer> correctRecordIndeces = getCorrectIndeces(condition);
+        correctRecordIndeces
                 .forEach(i -> queryResult.add(columnsFromSelect.stream()
                         .map(col -> col.getDataAtIndex(i).toString())
                         .collect(Collectors.toList())));
@@ -91,7 +81,17 @@ public class Table {
     }
 
     public List<String> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) {
-        List<Integer> correctRecordIndices = IntStream.range(0, idPointer).filter(i -> {
+        List<Integer> correctRecordIndeces = getCorrectIndeces(condition);
+        List<String> columnNames = new ArrayList<>(values.keySet());
+        //TODO ternary to return correct value
+        correctRecordIndeces
+                .forEach(i -> columnNames
+                        .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(name).setDataAtIndex(i, values.get(name)))));
+        return null;
+    }
+
+    private List<Integer> getCorrectIndeces(WhereCondition condition) {
+        return  IntStream.range(0, idPointer).filter(i -> {
             try {
                 return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
             } catch (EntityNotFoundException e) {
@@ -101,10 +101,5 @@ public class Table {
         })
                 .boxed()
                 .collect(Collectors.toList());
-        List<String> columnNames = new ArrayList<>(values.keySet());
-        correctRecordIndices
-                .forEach(i -> columnNames
-                        .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(name).setDataAtIndex(i, values.get(name)))));
-        return null;
     }
 }
