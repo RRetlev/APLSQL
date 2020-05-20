@@ -90,7 +90,7 @@ public class Table {
         return queryResult;
     }
 
-    public List<String> updateRecord(LinkedHashMap<String,String> values,WhereCondition condition) {
+    public List<String> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) {
         List<Integer> correctRecordIndices = IntStream.range(0, idPointer).filter(i -> {
             try {
                 return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
@@ -102,8 +102,9 @@ public class Table {
                 .boxed()
                 .collect(Collectors.toList());
         List<String> columnNames = new ArrayList<>(values.keySet());
-        correctRecordIndices.stream().map((i -> columnNames.stream().map(name -> getColumnByName(name).setDataAtIndex(i,values.get(name))).collect(Collectors.toList())));
-
+        correctRecordIndices
+                .forEach(i -> columnNames
+                        .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(name).setDataAtIndex(i, values.get(name)))));
         return null;
     }
 }

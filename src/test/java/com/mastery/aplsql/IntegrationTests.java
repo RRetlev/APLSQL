@@ -5,10 +5,7 @@ import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
-import com.mastery.aplsql.service.CreateQueryStringParser;
-import com.mastery.aplsql.service.InsertQueryStringParser;
-import com.mastery.aplsql.service.QueryStringParser;
-import com.mastery.aplsql.service.SelectQueryStringParser;
+import com.mastery.aplsql.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,7 +89,24 @@ public class IntegrationTests {
         table.insertRecords(Map.of("testColumn", "first", "name", "alma", "age", "fruit"));
         table.insertRecords(Map.of("testColumn", "second", "name", "JAck", "age", "veggie"));
         table.insertRecords(Map.of("testColumn", "third", "name", "alma", "age", "trash"));
-        Assertions.assertEquals(List.of(names,List.of("0","first","alma","fruit"),List.of("1","second","JAck","veggie"),List.of("2","third","alma","trash")),table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+        Assertions.assertEquals(List.of
+                (names,
+                        List.of("0","first","alma","fruit"),
+                        List.of("1","second","JAck","veggie"),
+                        List.of("2","third","alma","trash")),
+                table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+    }
+
+    @Test
+    void UpdateQueryWithWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+        String s = "UPDATE table SET name = Joe WHERE name = Jack";
+        Table table = storage.insertTable(new TableProperties("table"));
+        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
+        Column column =table.insertColumn(new ColumnProperties("name", Types.STRING));
+        table.insertRecords(Map.of("testColumn", "first", "name", "Jack"));
+        table.insertRecords(Map.of("testColumn", "second", "name", "alma"));
+        table.updateRecord(UpdateQueryStringParser.getUpdateParameters(s),QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals(column.getDataAtIndex(0),"Joe");
 
     }
 
