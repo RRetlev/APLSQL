@@ -34,7 +34,6 @@ public class Storage {
         tableNames.remove(name);
     }
 
-
     public Table getTableByName(String name) throws EntityNotFoundException {
         return DB.entrySet()
                 .stream()
