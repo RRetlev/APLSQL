@@ -29,6 +29,7 @@ public class QueryController {
     Storage storage = new Storage();
     Storage temporaryStorage;
 
+    // using this to test if server is up
     @GetMapping("/isworking")
     public Boolean isWorking() {
         return true;
