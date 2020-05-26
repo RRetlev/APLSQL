@@ -224,7 +224,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"name\",\"isActive\",\"age\"],[\"Thomas\",\"true\",\"21\"],[\"Martha\",\"false\",\"20\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
