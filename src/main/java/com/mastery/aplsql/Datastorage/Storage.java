@@ -7,16 +7,24 @@ import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.model.Types;
 import com.mastery.aplsql.service.Util;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Storage {
     private HashMap<TableProperties, Table> DB = new HashMap<>();
     private List<String> tableNames = new ArrayList<>();
+
+    public Storage(Storage that){
+        this(that.getDB(),that.getTableNames());
+    }
 
     public Table insertTable(TableProperties tableProperties) throws DuplicateEntryException {
         if (!Util.containsName(tableNames, tableProperties.getName())) {

@@ -4,6 +4,7 @@ import com.mastery.aplsql.exceptionhandling.*;
 import com.mastery.aplsql.service.SelectQueryStringParser;
 import com.mastery.aplsql.service.Util;
 import lombok.Data;
+import org.springframework.http.ResponseEntity;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -102,4 +103,5 @@ public class Table {
                 .boxed()
                 .collect(Collectors.toList());
     }
+    private void deleteRecords(){}
 }

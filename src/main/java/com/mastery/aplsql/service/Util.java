@@ -74,4 +74,5 @@ public class Util {
         }
         return behaviour;
     }
+    //TODO lambda switchcase
 }

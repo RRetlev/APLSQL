@@ -26,11 +26,18 @@ import java.util.Map;
 @Slf4j
 public class QueryController {
 
-    private final Storage storage = new Storage();
+    Storage storage = new Storage();
+    Storage temporaryStorage;
 
     @GetMapping("/isworking")
     public Boolean isWorking() {
         return true;
+    }
+
+    @ModelAttribute
+    public void createStorageSnapshot(){
+        System.out.println("ittvagyok");
+        temporaryStorage = new Storage(storage);
     }
 
     @PostMapping("/create")
