@@ -40,10 +40,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/create",
+					"raw": "https://aplsql-staging.herokuapp.com/create",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -89,10 +89,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/create",
+					"raw": "https://aplsql-staging.herokuapp.com/create",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -143,10 +143,10 @@
 					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Thomas, 21, true)\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/insert",
+					"raw": "https://aplsql-staging.herokuapp.com/insert",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -197,10 +197,10 @@
 					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Martha, 20, false)\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/insert",
+					"raw": "https://aplsql-staging.herokuapp.com/insert",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -245,10 +245,10 @@
 					"raw": "{\"queryString\": \"SELECT * FROM students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/select",
+					"raw": "https://aplsql-staging.herokuapp.com/select",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -293,10 +293,10 @@
 					"raw": "{\"queryString\": \"SELECT name FROM students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/select",
+					"raw": "https://aplsql-staging.herokuapp.com/select",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -344,10 +344,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/select",
+					"raw": "https://aplsql-staging.herokuapp.com/select",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -388,10 +388,10 @@
 					"raw": "{\"queryString\": \"DROP TABLE students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/drop-table",
+					"raw": "https://aplsql-staging.herokuapp.com/drop-table",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
@@ -432,10 +432,10 @@
 					"raw": "{\"queryString\": \"DROP TABLE students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql.herokuapp.com/drop-table",
+					"raw": "https://aplsql-staging.herokuapp.com/drop-table",
 					"protocol": "https",
 					"host": [
-						"aplsql",
+						"aplsql-staging",
 						"herokuapp",
 						"com"
 					],
