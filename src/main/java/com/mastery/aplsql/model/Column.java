@@ -31,4 +31,8 @@ public class Column<T> {
     public void setDataAtIndex(int i, T value){
         data.set(i,value);
     }
+
+    public void removeDataAtIndex(int i){
+        data.remove(i);
+    }
 }

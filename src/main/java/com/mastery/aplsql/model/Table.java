@@ -103,5 +103,8 @@ public class Table {
                 .boxed()
                 .collect(Collectors.toList());
     }
-    private void deleteRecords(){}
+    public void deleteRecords(WhereCondition condition){
+        List<Integer> correctindeces = getCorrectIndeces(condition);
+        correctindeces.forEach(i -> columns.values().forEach(ThrowingConsumer.unchecked(record -> record.removeDataAtIndex(i))));
+    }
 }

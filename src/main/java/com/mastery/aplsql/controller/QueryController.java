@@ -82,4 +82,13 @@ public class QueryController {
         storage.dropTable(tableName);
         return new ResponseEntity<>("The table '" + tableName + "' has been dropped.", HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteRecord(@RequestBody Query query) throws EntityNotFoundException {
+        log.info(query.getQueryString());
+        String tablename = QueryStringParser.parseTableName(query.getQueryString());
+        Table table = storage.getTableByName(tablename);
+        table.deleteRecords(QueryStringParser.parseWhereCondition(query.getQueryString()));
+        return new ResponseEntity<>("delete",HttpStatus.OK);
+    }
 }
