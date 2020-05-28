@@ -59,7 +59,7 @@ public class StringParserTests {
     }
 
     @Test
-    void oneSelectColumnNameParsed() {
+    void oneSelectColumnNameParsed() throws MalformedQueryException {
         String s = "SELECT alma, körte, szilva FROM testTable";
         List<String> list = List.of("alma", "körte", "szilva");
         Assertions.assertEquals(list, SelectQueryStringParser.parseColumnNames(s));

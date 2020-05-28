@@ -24,6 +24,7 @@ public class QueryController {
     Storage storage = new Storage();
     Storage temporaryStorage;
 
+    // using this to test if server is online while api testing in pipeline
     @GetMapping("/isworking")
     public Boolean isWorking() {
         return true;
@@ -44,11 +45,10 @@ public class QueryController {
     }
 
     @PostMapping("/select")
-    public List<List<String>> getResultOfQuery(@RequestBody Query query) throws EntityNotFoundException {
+    public List<List<String>> getResultOfQuery(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException {
         log.info(query.getQueryString());
         String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
         List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
-        if (columnNames == null) throw new EntityNotFoundException();
         return storage.getTableByName(tableName).selectRecords(columnNames,QueryStringParser.parseWhereCondition(query.getQueryString()));
     }
 
