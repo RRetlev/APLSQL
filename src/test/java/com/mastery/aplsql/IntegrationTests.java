@@ -3,6 +3,7 @@ package com.mastery.aplsql;
 import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.*;
@@ -65,7 +66,7 @@ public class IntegrationTests {
     }
 
     @Test
-    void SelectQueryWithWereCondition() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+    void SelectQueryWithWereCondition() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
         String s = "SELECT * FROM table WHERE name = alma";
         List<String> names = List.of("id","testColumn", "name", "age");
         Table table = storage.insertTable(new TableProperties("table"));
@@ -79,7 +80,7 @@ public class IntegrationTests {
 
     }
     @Test
-    void SelectQueryWithoutWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+    void SelectQueryWithoutWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
         String s = "SELECT * FROM table";
         List<String> names = List.of("id","testColumn", "name", "age");
         Table table = storage.insertTable(new TableProperties("table"));
