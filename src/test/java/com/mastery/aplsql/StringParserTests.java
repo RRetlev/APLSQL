@@ -1,5 +1,6 @@
 package com.mastery.aplsql;
 
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.WhereCondition;
 import com.mastery.aplsql.service.*;
@@ -58,7 +59,7 @@ public class StringParserTests {
     }
 
     @Test
-    void oneSelectColumnNameParsed() {
+    void oneSelectColumnNameParsed() throws MalformedQueryException {
         String s = "SELECT alma, körte, szilva FROM testTable";
         List<String> list = List.of("alma", "körte", "szilva");
         Assertions.assertEquals(list, SelectQueryStringParser.parseColumnNames(s));

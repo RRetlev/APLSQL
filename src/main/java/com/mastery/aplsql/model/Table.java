@@ -59,14 +59,14 @@ public class Table {
     }
 
     public List<List<String>> selectRecords(List<String> columnNames, WhereCondition condition) throws EntityNotFoundException {
-        for (String colName : columnNames) {
-            if (!Util.containsName(this.columnNames, colName)) throw new EntityNotFoundException();
-        }
-
         List<List<String>> queryResult = new ArrayList<>();
 
         if (columnNames.size() == 1 && columnNames.get(0).equals("*")) {
             columnNames = new ArrayList<>(this.columnNames);
+        } else {
+            for (String colName : columnNames) {
+                if (!Util.containsName(this.columnNames, colName)) throw new EntityNotFoundException();
+            }
         }
         queryResult.add(columnNames);
         List<String> finalColumnNamesFormQuery = columnNames;
