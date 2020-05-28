@@ -1,5 +1,6 @@
 package com.mastery.aplsql.service;
 
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.OperatorBehaviour;
 
 import java.util.Arrays;
@@ -9,10 +10,10 @@ import java.util.regex.Pattern;
 
 public class SelectQueryStringParser extends  QueryStringParser{
 
-    public static List<String> parseColumnNames(String s){
+    public static List<String> parseColumnNames(String s) throws MalformedQueryException {
         Pattern p = Pattern.compile("\\bSELECT\\s+(.{2,})\\sFROM\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(s);
-        if (!m.find()) return List.of("*");
+        if (!m.find()) throw new MalformedQueryException();
         return Arrays.asList(m.group(1).split("[\\s,]+"));
     }
     @Deprecated
