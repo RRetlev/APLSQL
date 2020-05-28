@@ -21,7 +21,6 @@ public class Table {
         this.idPointer = 0;
     }
 
-
     public Column insertColumn(ColumnProperties columnProperties) throws DuplicateEntryException {
         if (!Util.containsName(columnNames, columnProperties.getName())) {
             var column = Util.createColumn(columnProperties.getDataType().dataType);
@@ -58,7 +57,11 @@ public class Table {
         idPointer++;
     }
 
-    public List<List<String>> selectRecords(List<String> columnNames, WhereCondition condition) {
+    public List<List<String>> selectRecords(List<String> columnNames, WhereCondition condition) throws EntityNotFoundException {
+        for (String colName : columnNames) {
+            if (!Util.containsName(this.columnNames, colName)) throw new EntityNotFoundException();
+        }
+
         List<List<String>> queryResult = new ArrayList<>();
 
         if (columnNames.size() == 1 && columnNames.get(0).equals("*")) {
@@ -91,7 +94,7 @@ public class Table {
     }
 
     private List<Integer> getCorrectIndeces(WhereCondition condition) {
-        return  IntStream.range(0, idPointer).filter(i -> {
+        return IntStream.range(0, idPointer).filter(i -> {
             try {
                 return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
             } catch (EntityNotFoundException e) {
