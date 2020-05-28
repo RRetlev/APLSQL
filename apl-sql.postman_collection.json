@@ -6,6 +6,43 @@
 	},
 	"item": [
 		{
+			"name": "APLSQL smoke",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "79fc88c3-8c30-4219-b3fe-48d0d8435fc6",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(\"true\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/isworking",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"isworking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "APLSQL create",
 			"event": [
 				{
