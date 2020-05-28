@@ -62,7 +62,7 @@ public class IntegrationTests {
     void DataInsertedFromQuery() throws Exception {
         String s = "INSERT INTO test (name) VALUES (Jack)";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)).insertRecords(InsertQueryStringParser.parseInsertValues(s));
+        tableService.insertRecords(dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)),InsertQueryStringParser.parseInsertValues(s));
         Assertions.assertEquals("Jack", tableService.getColumnByName(table,"name").getDataAtIndex(3));
 
     }

@@ -47,36 +47,4 @@ public class Storage {
         return Objects.hash(DB, tableNames);
     }
 
-    public Table insertTable(TableProperties tableProperties) throws DuplicateEntryException {
-        if (!Util.containsName(tableNames, tableProperties.getName())) {
-            Table table = new Table();
-            tableNames.add(tableProperties.getName());
-            DB.put(tableProperties, table);
-            table.insertColumn(new ColumnProperties("id", Types.INTEGER));
-            return table;
-        }
-        throw new DuplicateEntryException();
-    }
-
-    public void dropTable(String name) throws EntityNotFoundException {
-        DB.remove(getTablePropertiesByName(name));
-        tableNames.remove(name);
-    }
-
-    public Table getTableByName(String name) throws EntityNotFoundException {
-        return DB.entrySet()
-                .stream()
-                .filter(tablePropertiesTableEntry -> tablePropertiesTableEntry.getKey().getName().equals(name))
-                .findFirst()
-                .orElseThrow(EntityNotFoundException::new).getValue();
-    }
-
-
-    public TableProperties getTablePropertiesByName(String name) throws EntityNotFoundException {
-        return DB.keySet()
-                .stream()
-                .filter(tableProperties -> tableProperties.getName().equals(name))
-                .findFirst()
-                .orElseThrow(EntityNotFoundException::new);
-    }
 }
