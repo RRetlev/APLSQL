@@ -94,8 +94,8 @@ public class Table {
         return selectRecords(new ArrayList<>(this.columnNames),condition);
     }
 
-    private List<Integer> getCorrectIndeces(WhereCondition condition) {
-        return IntStream.range(0, idPointer).filter(i -> {
+    private List<Integer> getCorrectIndeces(WhereCondition condition) throws EntityNotFoundException {
+        return IntStream.range(0, getColumnByName("id").getData().size()).filter(i -> {
             try {
                 return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
             } catch (EntityNotFoundException e) {
@@ -106,8 +106,9 @@ public class Table {
                 .boxed()
                 .collect(Collectors.toList());
     }
-    public void deleteRecords(WhereCondition condition){
+    public void deleteRecords(WhereCondition condition) throws EntityNotFoundException {
         List<Integer> correctIndeces = getCorrectIndeces(condition);
+        Collections.reverse(correctIndeces);
         correctIndeces.forEach(i -> columns.values().forEach(ThrowingConsumer.unchecked(record -> record.removeDataAtIndex(i))));
     }
 }
