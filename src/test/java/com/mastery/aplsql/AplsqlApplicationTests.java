@@ -5,6 +5,7 @@ import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
+import com.mastery.aplsql.service.DataBaseService;
 import com.mastery.aplsql.service.TableService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,10 +27,13 @@ class AplsqlApplicationTests {
     @Autowired
     TableService tableService;
 
+    @Autowired
+    DataBaseService dataBaseService;
+
     @BeforeEach
     void init() throws Exception {
         storage = new Storage();
-        table = storage.insertTable(new TableProperties("testTable"));
+        table = dataBaseService.insertTable(storage,new TableProperties("testTable"));
         column = tableService.insertColumn(table,new ColumnProperties("testColumn", Types.STRING));
     }
 
@@ -46,36 +50,36 @@ class AplsqlApplicationTests {
 
     @Test
     void tableCreatedWithoutPrimaryKeyGetsID() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable(new TableProperties("test"));
-        Assertions.assertEquals("id", storage.getTablePropertiesByName("test").getPrimaryKey());
+        dataBaseService.insertTable(storage,new TableProperties("test"));
+        Assertions.assertEquals("id", dataBaseService.getTablePropertiesByName(storage,"test").getPrimaryKey());
     }
 
     @Test
     void tableCreatedWithPrimaryKeyGetsIt() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable(new TableProperties("test", "kiskutya"));
-        Assertions.assertEquals("kiskutya", storage.getTablePropertiesByName("test").getPrimaryKey());
+        dataBaseService.insertTable(storage,new TableProperties("test", "kiskutya"));
+        Assertions.assertEquals("kiskutya", dataBaseService.getTablePropertiesByName(storage,"test").getPrimaryKey());
     }
 
     @Test
     void DuplicateNameOnTableCreationThrowsException() throws DuplicateEntryException {
-        storage.insertTable(new TableProperties("test"));
-        Assertions.assertThrows(DuplicateEntryException.class, () -> storage.insertTable(new TableProperties("test")));
+        dataBaseService.insertTable(storage,new TableProperties("test"));
+        Assertions.assertThrows(DuplicateEntryException.class, () -> dataBaseService.insertTable(storage,new TableProperties("test")));
     }
 
     @Test
     void getTableByName() throws DuplicateEntryException, EntityNotFoundException {
-        storage.insertTable(new TableProperties("test1"));
-        storage.insertTable(new TableProperties("test2"));
-        Table table = storage.insertTable(new TableProperties("test3"));
-        storage.insertTable(new TableProperties("test4"));
-        storage.insertTable(new TableProperties("test5"));
-        storage.insertTable(new TableProperties("test6"));
-        Assertions.assertEquals(table, storage.getTableByName("test3"));
+        dataBaseService.insertTable(storage,new TableProperties("test1"));
+        dataBaseService.insertTable(storage,new TableProperties("test2"));
+        Table table = dataBaseService.insertTable(storage,new TableProperties("test3"));
+        dataBaseService.insertTable(storage,new TableProperties("test4"));
+        dataBaseService.insertTable(storage,new TableProperties("test5"));
+        dataBaseService.insertTable(storage,new TableProperties("test6"));
+        Assertions.assertEquals(table, dataBaseService.getTableByName(storage,"test3"));
     }
 
     @Test
     void TableNotFoundThrowsException() {
-        Assertions.assertThrows(EntityNotFoundException.class, () -> storage.getTableByName("habakukk"));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getTableByName(storage,"habakukk"));
     }
 
     @Test
@@ -134,8 +138,8 @@ class AplsqlApplicationTests {
 
     @Test
     void tableDropped() throws EntityNotFoundException {
-        storage.dropTable("testTable");
-        Assertions.assertThrows(EntityNotFoundException.class, () -> storage.getTablePropertiesByName("testTable"));
+        dataBaseService.dropTable(storage,"testTable");
+        Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getTablePropertiesByName(storage,"testTable"));
     }
 
 }
