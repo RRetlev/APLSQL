@@ -212,6 +212,50 @@
 			"response": []
 		},
 		{
+			"name": "APLSQL insert invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7e60b96c-b110-4b36-bb6e-e9a452fefe59",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Thomas, true, 21)\"}"
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/insert",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "APLSQL select *",
 			"event": [
 				{
@@ -338,10 +382,395 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT name,isActive FROM students\"}",
+					"raw": "{\"queryString\": \"SELECT name, isActive FROM students\"}",
 					"options": {
 						"raw": {}
 					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select non-existent table",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "aba8293f-10d6-47c1-9878-9d77004c472a",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM notFound\"} ",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select non-existent column",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f84fcca3-fb60-43a0-9cbc-78f53ddf4d7b",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT notFound FROM students\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select no column",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c23bf81a-1cea-41b5-8e16-3061c18698af",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body(\"The query you tried to execute is not properly formatted!\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT FROM students\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where =",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0ac38528-d30a-42ba-ad46-23a70be2678d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE name = Thomas \"}"
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where !=",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dca7632f-9f7f-4de7-9a2e-97976e192d66",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE name != Martha \"}"
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where <",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d40d742-de5b-4d3d-b2fe-2cba0e2dd2ac",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age < 21\"}"
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where >",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6ee4e1b0-29c5-4f6a-bf8a-6370f8775196",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age > 20 \"}"
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where >=",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0bcbf416-ae35-4e49-bd61-fa6cb96a4031",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age >= 20\"}"
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
