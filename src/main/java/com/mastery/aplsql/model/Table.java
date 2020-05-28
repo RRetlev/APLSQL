@@ -22,32 +22,17 @@ public class Table {
         this.idPointer = 0;
     }
 
-    public Table(Table that){
+    public Table(Table that) {
         this.columns = this.copyOfColumns(that.columns);
         this.columnNames = that.columnNames;
         this.idPointer = that.idPointer;
     }
 
-    private LinkedHashMap<ColumnProperties, Column> copyOfColumns(LinkedHashMap<ColumnProperties, Column> columns){
+    private LinkedHashMap<ColumnProperties, Column> copyOfColumns(LinkedHashMap<ColumnProperties, Column> columns) {
         LinkedHashMap<ColumnProperties, Column> copied = new LinkedHashMap<>();
         columns.forEach((key, value) -> copied.put(new ColumnProperties(key), new Column(value)));
         return copied;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
