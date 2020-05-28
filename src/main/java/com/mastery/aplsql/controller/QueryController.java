@@ -8,18 +8,13 @@ import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.Query;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
-import com.mastery.aplsql.service.CreateQueryStringParser;
-import com.mastery.aplsql.service.InsertQueryStringParser;
-import com.mastery.aplsql.service.QueryStringParser;
-import com.mastery.aplsql.service.SelectQueryStringParser;
+import com.mastery.aplsql.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin
@@ -36,7 +31,6 @@ public class QueryController {
 
     @ModelAttribute
     public void createStorageSnapshot(){
-        System.out.println("ittvagyok");
         temporaryStorage = new Storage(storage);
     }
 
@@ -59,7 +53,7 @@ public class QueryController {
     }
 
     @PostMapping("/insert")
-    public ResponseEntity<String> addRecord(@RequestBody Query query) throws EntityNotFoundException, TypeMismatchException {
+    public ResponseEntity<String> addRecord(@RequestBody Query query) throws EntityNotFoundException, TypeMismatchException, MalformedQueryException {
         log.info(query.getQueryString());
         String tableName = InsertQueryStringParser.parseTableName(query.getQueryString());
         Map<String, String> insertValues = InsertQueryStringParser.parseInsertValues(query.getQueryString());
@@ -70,9 +64,12 @@ public class QueryController {
     }
 
     @PutMapping("/update")
-    public List<String> updateRecord(@RequestBody Query query) {
+    public List<List<String>> updateRecord(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException {
         log.info(query.getQueryString());
-        return null;
+        return storage.getTableByName(query.getQueryString())
+                .updateRecord(UpdateQueryStringParser.getUpdateParameters(
+                        query.getQueryString()),
+                        QueryStringParser.parseWhereCondition(query.getQueryString()));
     }
 
     @DeleteMapping("/drop-table")
@@ -86,6 +83,7 @@ public class QueryController {
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteRecord(@RequestBody Query query) throws EntityNotFoundException {
         log.info(query.getQueryString());
+        Stack stack = new Stack();
         String tablename = QueryStringParser.parseTableName(query.getQueryString());
         Table table = storage.getTableByName(tablename);
         table.deleteRecords(QueryStringParser.parseWhereCondition(query.getQueryString()));

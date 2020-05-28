@@ -3,6 +3,7 @@ package com.mastery.aplsql;
 import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.*;
@@ -98,7 +99,7 @@ public class IntegrationTests {
     }
 
     @Test
-    void UpdateQueryWithWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+    void UpdateQueryWithWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
         String s = "UPDATE table SET name = Joe WHERE name = Jack";
         Table table = storage.insertTable(new TableProperties("table"));
         table.insertColumn(new ColumnProperties("testColumn", Types.STRING));

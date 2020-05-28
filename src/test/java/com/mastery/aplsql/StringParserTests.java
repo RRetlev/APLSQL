@@ -1,5 +1,6 @@
 package com.mastery.aplsql;
 
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.WhereCondition;
 import com.mastery.aplsql.service.*;
@@ -43,14 +44,14 @@ public class StringParserTests {
     }
 
     @Test
-    void oneInsertParameterParsed() {
+    void oneInsertParameterParsed() throws MalformedQueryException {
         String s = "INSERT INTO test (name) VALUES (Jack)";
         Map<String, String> map = Map.of("name", "Jack");
         Assertions.assertEquals(map, InsertQueryStringParser.parseInsertValues(s));
     }
 
     @Test
-    void multipleInsertParameterParsed() {
+    void multipleInsertParameterParsed() throws MalformedQueryException {
         String s = "INSERT INTO test (name, age, color) VALUES (Jack, 2, blue)";
         Map<String, String> map = Map.of("name", "Jack", "age", "2", "color", "blue");
         Assertions.assertEquals(map, InsertQueryStringParser.parseInsertValues(s));
@@ -100,7 +101,7 @@ public class StringParserTests {
     }
 
     @Test
-    void getUpdateValues(){
+    void getUpdateValues() throws MalformedQueryException {
         String s = "UPDATE table SET name = Jack, surname = Carl WHERE name = Jack";
         Assertions.assertEquals(Map.of("name","Jack","surname","Carl"),UpdateQueryStringParser.getUpdateParameters(s));
     }

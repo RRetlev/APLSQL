@@ -81,14 +81,14 @@ public class Table {
         return queryResult;
     }
 
-    public List<String> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) {
+    public List<List<String>> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) {
         List<Integer> correctRecordIndeces = getCorrectIndeces(condition);
         List<String> columnNames = new ArrayList<>(values.keySet());
         //TODO ternary to return correct value
         correctRecordIndeces
                 .forEach(i -> columnNames
                         .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(name).setDataAtIndex(i, values.get(name)))));
-        return null;
+        return selectRecords(new ArrayList<>(this.columnNames),condition);
     }
 
     private List<Integer> getCorrectIndeces(WhereCondition condition) {
@@ -104,7 +104,7 @@ public class Table {
                 .collect(Collectors.toList());
     }
     public void deleteRecords(WhereCondition condition){
-        List<Integer> correctindeces = getCorrectIndeces(condition);
-        correctindeces.forEach(i -> columns.values().forEach(ThrowingConsumer.unchecked(record -> record.removeDataAtIndex(i))));
+        List<Integer> correctIndeces = getCorrectIndeces(condition);
+        correctIndeces.forEach(i -> columns.values().forEach(ThrowingConsumer.unchecked(record -> record.removeDataAtIndex(i))));
     }
 }
