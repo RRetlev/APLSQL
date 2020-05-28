@@ -16,54 +16,39 @@ import java.util.Map;
 @SpringBootTest
 public class IntegrationTests {
     private static Storage storage;
-    private static Storage snapShot;
 
     @BeforeEach
-     void init() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+    void init() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
         storage = new Storage();
         Table table = storage.insertTable(new TableProperties("test"));
-        table.insertColumn(new ColumnProperties("name",Types.STRING));
-        table.insertColumn(new ColumnProperties("email",Types.STRING));
-        table.insertColumn(new ColumnProperties("age",Types.INTEGER));
-        table.insertRecords(Map.of("name","Joe","email","joe@joe.joe","age", "5"));
-        table.insertRecords(Map.of("name","Bill","email","bill@bill.bill","age", "9"));
-        table.insertRecords(Map.of("name","Dick","email","dick@dick.dick","age", "47"));
-        snapShot = new Storage(storage);
-    }
-
-//    @AfterEach
-//    void rollback(){
-//        storage = new Storage(snapShot);
-//    }
-    @Test
-    void testIfSnapShotIsEqual(){
-        Assertions.assertEquals(storage, snapShot);
-        Assertions.assertEquals(storage.getDB(), snapShot.getDB());
-        Assertions.assertEquals(storage.getTableNames(), snapShot.getTableNames());
+        table.insertColumn(new ColumnProperties("name", Types.STRING));
+        table.insertColumn(new ColumnProperties("email", Types.STRING));
+        table.insertColumn(new ColumnProperties("age", Types.INTEGER));
+        table.insertRecords(Map.of("name", "Joe", "email", "joe@joe.joe", "age", "5"));
+        table.insertRecords(Map.of("name", "Bill", "email", "bill@bill.bill", "age", "9"));
+        table.insertRecords(Map.of("name", "Dick", "email", "dick@dick.dick", "age", "47"));
     }
 
     @Test
-    void TableCreatedFromQueryString() throws Exception {
-        String s = "CREATE TABLE pipacs(ID int)";
-        Table table = storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(s)));
-        table.insertColumns(CreateQueryStringParser.getColumnSpecs(s));
-        Assertions.assertEquals(new TableProperties("pipacs"), storage.getTablePropertiesByName("pipacs"));
+    void TableCreatedFromQueryString() throws MalformedQueryException, DuplicateEntryException {
+        String s = "CREATE TABLE test2 (isActive boolean)";
+        storage.insertTable(new TableProperties(CreateQueryStringParser.parseTableName(s)));
+        Assertions.assertDoesNotThrow(() -> storage.getTableByName("test2"));
     }
+
 
     @Test
     void DataInsertedFromQuery() throws Exception {
-//        Assertions.assertEquals(snapShot,storage);
-        String s = "INSERT INTO test(name) VALUES (Jack)";
+        String s = "INSERT INTO test (name) VALUES (Jack)";
         Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
         storage.getTableByName(QueryStringParser.parseTableName(s)).insertRecords(InsertQueryStringParser.parseInsertValues(s));
         Assertions.assertEquals("Jack", table.getColumnByName("name").getDataAtIndex(3));
-//        Assertions.assertEquals(snapShot,storage);
 
     }
 
     @Test
     void MultipleDataInsertedFromQuery() throws Exception {
-        String s = "INSERT INTO test(name, age) VALUES (Philip,6)";
+        String s = "INSERT INTO test (name, age) VALUES (Philip,6)";
         Table table = storage.getTableByName("test");
         Column nameColumn = table.getColumnByName("name");
         Column ageColumn = table.getColumnByName("age");
@@ -73,62 +58,72 @@ public class IntegrationTests {
     }
 
     @Test
-    void SelectQueryReturnsAllTheColumnsOnStar() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
-        List<String> l = List.of("*");
-        List<String> names = List.of("id","testColumn", "alma", "körte");
-        Table table = storage.insertTable(new TableProperties("test"));
-        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
-        table.insertColumn(new ColumnProperties("alma", Types.STRING));
-        table.insertColumn(new ColumnProperties("körte", Types.STRING));
-        table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
-        table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("0","first", "pos", "fruit"), List.of("1","second", "trash", "veggie")), table.selectRecords(l,new WhereCondition()));
-    }
-
-    @Test
-    void SelectQueryWithWereCondition() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
-        String s = "SELECT * FROM table WHERE name = alma";
-        List<String> names = List.of("id","testColumn", "name", "age");
-        Table table = storage.insertTable(new TableProperties("table"));
-        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
-        table.insertColumn(new ColumnProperties("name", Types.STRING));
-        table.insertColumn(new ColumnProperties("age", Types.STRING));
-        table.insertRecords(Map.of("testColumn", "first", "name", "alma", "age", "fruit"));
-        table.insertRecords(Map.of("testColumn", "second", "name", "JAck", "age", "veggie"));
-        table.insertRecords(Map.of("testColumn", "third", "name", "alma", "age", "trash"));
-        Assertions.assertEquals(List.of(names,List.of("0","first","alma","fruit"),List.of("2","third","alma","trash")),table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
-
-    }
-    @Test
-    void SelectQueryWithoutWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
+    void SelectAllQueryWithoutWhere() throws EntityNotFoundException, MalformedQueryException {
         String s = "SELECT * FROM table";
-        List<String> names = List.of("id","testColumn", "name", "age");
-        Table table = storage.insertTable(new TableProperties("table"));
-        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
-        table.insertColumn(new ColumnProperties("name", Types.STRING));
-        table.insertColumn(new ColumnProperties("age", Types.STRING));
-        table.insertRecords(Map.of("testColumn", "first", "name", "alma", "age", "fruit"));
-        table.insertRecords(Map.of("testColumn", "second", "name", "JAck", "age", "veggie"));
-        table.insertRecords(Map.of("testColumn", "third", "name", "alma", "age", "trash"));
-        Assertions.assertEquals(List.of
-                (names,
-                        List.of("0","first","alma","fruit"),
-                        List.of("1","second","JAck","veggie"),
-                        List.of("2","third","alma","trash")),
+        List<String> headers = List.of("id", "name", "email", "age");
+        List<String> col1 = List.of("0", "Joe", "joe@joe.joe", "5");
+        List<String> col2 = List.of("1", "Bill", "bill@bill.bill", "9");
+        List<String> col3 = List.of("2", "Dick", "dick@dick.dick", "47");
+        Table table = storage.getTableByName("test");
+        Assertions.assertEquals(List.of(headers, col1, col2, col3),
                 table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
     }
 
     @Test
-    void UpdateQueryWithWhere() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
-        String s = "UPDATE table SET name = Joe WHERE name = Jack";
-        Table table = storage.insertTable(new TableProperties("table"));
-        table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
-        Column column =table.insertColumn(new ColumnProperties("name", Types.STRING));
-        table.insertRecords(Map.of("testColumn", "first", "name", "Jack"));
-        table.insertRecords(Map.of("testColumn", "second", "name", "alma"));
-        table.updateRecord(UpdateQueryStringParser.getUpdateParameters(s),QueryStringParser.parseWhereCondition(s));
-        Assertions.assertEquals(column.getDataAtIndex(0),"Joe");
+    void SelectQueryWithWereCondition() throws EntityNotFoundException, MalformedQueryException {
+        String s = "SELECT * FROM test WHERE name = Dick";
+        List<String> headers = List.of("id", "name", "email", "age");
+        List<String> colToSelect = List.of("2", "Dick", "dick@dick.dick", "47");
+        Table table = storage.getTableByName("test");
+        Assertions.assertEquals(List.of(headers, colToSelect), table.selectRecords(SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
 
+    }
+
+    @Test
+    void UpdateWithoutWhere() throws MalformedQueryException, EntityNotFoundException {
+        String s = "UPDATE test SET name = Emily";
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        table.updateRecord(UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals("Emily", table.getColumnByName("name").getDataAtIndex(0));
+        Assertions.assertEquals("Emily", table.getColumnByName("name").getDataAtIndex(1));
+        Assertions.assertEquals("Emily", table.getColumnByName("name").getDataAtIndex(2));
+    }
+
+    @Test
+    void UpdateQueryWithWhere() throws EntityNotFoundException, MalformedQueryException {
+        String s = "UPDATE test SET name = Emily WHERE name = Dick";
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        table.updateRecord(UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals("Emily", table.getColumnByName("name").getDataAtIndex(2));
+    }
+
+    @Test
+    void UpdateQueryWithWhereMultipleData() throws EntityNotFoundException, MalformedQueryException {
+        String s = "UPDATE test SET name = Emily, age = 10 WHERE name = Dick";
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        table.updateRecord(UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals("Emily", table.getColumnByName("name").getDataAtIndex(2));
+        Assertions.assertEquals("10", table.getColumnByName("age").getDataAtIndex(2));
+
+    }
+
+    @Test
+    void DeleteQueryWithoutWhere() throws MalformedQueryException, EntityNotFoundException {
+        String s = "DELETE FROM test";
+        List<String> headers = List.of("id", "name", "email", "age");
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        table.deleteRecords(QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals(List.of(headers), table.selectRecords(List.of("*"), new WhereCondition()));
+    }
+
+    @Test
+    void DeleteQueryWithWhere() throws EntityNotFoundException, MalformedQueryException {
+        String s = "DELETE FROM test WHERE age > 10";
+        List<String> headers = List.of("id", "name", "email", "age");
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        table.deleteRecords(QueryStringParser.parseWhereCondition(s));
+        Assertions.assertEquals(List.of(headers),
+                table.selectRecords(List.of("*"), QueryStringParser.parseWhereCondition("WHERE age > 10")));
     }
 
 }

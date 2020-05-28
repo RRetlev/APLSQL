@@ -10,8 +10,10 @@ public class UpdateQueryStringParser extends QueryStringParser {
 
 
     public static LinkedHashMap<String,String> getUpdateParameters(String queryString) throws MalformedQueryException {
+        queryString = queryString.toLowerCase().contains("where") ?
+                queryString.substring(0, queryString.toLowerCase().indexOf("where")) : queryString;
         LinkedHashMap values = new LinkedHashMap();
-        Pattern p = Pattern.compile("\\bSET\\W+(.{2,})\\sWHERE\\b");
+        Pattern p = Pattern.compile("\\bSET\\s+(.{2,})\\b");
         Matcher m = p.matcher(queryString);
         if (!m.find()) throw new MalformedQueryException() ;
         String[] arr = m.group(1).split("\\s=|,");

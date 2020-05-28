@@ -94,7 +94,9 @@ public class StringParserTests {
             "CREATE TABLE table (col1 string, col2 int)",
             "INSERT INTO table (col1, col2, col3) VALUES (apple, cider, vinegar)",
             "SELECT * FROM table",
-            "DROP TABLE table"
+            "DROP TABLE table",
+            "UPDATE table SET name = name",
+            "DELETE FROM table"
     })
     void testNewParserTableName(String queryString) throws MalformedQueryException {
         Assertions.assertEquals("table", QueryStringParser.parseTableName(queryString));
