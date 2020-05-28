@@ -1,7 +1,8 @@
-package com.mastery.aplsql.service;
+package com.mastery.aplsql.service.scraper;
 
 import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.WhereCondition;
+import com.mastery.aplsql.service.Util;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -20,6 +21,6 @@ public abstract class QueryStringParser {
         Pattern p = Pattern.compile("\\bWHERE\\s(\\w+)\\s([<>=!]{1,2}|LIKE|IN|BETWEEN)\\s(\\w+)\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
         if (!m.find()) return new WhereCondition();
-        return  new WhereCondition(m.group(1),Util.decideOperation(m.group(2)),m.group(3));
+        return  new WhereCondition(m.group(1), Util.decideOperation(m.group(2)),m.group(3));
     }
 }

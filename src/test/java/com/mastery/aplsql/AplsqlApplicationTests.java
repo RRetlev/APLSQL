@@ -5,9 +5,11 @@ import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
+import com.mastery.aplsql.service.TableService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -21,11 +23,14 @@ class AplsqlApplicationTests {
     private Table table;
     private Column column;
 
+    @Autowired
+    TableService tableService;
+
     @BeforeEach
     void init() throws Exception {
         storage = new Storage();
         table = storage.insertTable(new TableProperties("testTable"));
-        column = table.insertColumn(new ColumnProperties("testColumn", Types.STRING));
+        column = tableService.insertColumn(table,new ColumnProperties("testColumn", Types.STRING));
     }
 
     @Test
@@ -75,31 +80,31 @@ class AplsqlApplicationTests {
 
     @Test
     void columnCreated() throws Exception {
-        table.insertColumn(new ColumnProperties("kutya", Types.STRING));
-        table.insertColumn(new ColumnProperties("cica", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("kutya", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("cica", Types.STRING));
         Assertions.assertEquals(4, table.getColumns().size());
     }
 
     @Test
     void GetColumnByName() throws Exception {
-        table.insertColumn(new ColumnProperties("test2", Types.STRING));
-        table.insertColumn(new ColumnProperties("test3", Types.STRING));
-        Column column = table.insertColumn(new ColumnProperties("test", Types.STRING));
-        table.insertColumn(new ColumnProperties("test5", Types.STRING));
-        table.insertColumn(new ColumnProperties("test9", Types.STRING));
-        table.insertColumn(new ColumnProperties("test76", Types.STRING));
-        Assertions.assertEquals(column, table.getColumnByName("test"));
+        tableService.insertColumn(table,new ColumnProperties("test2", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("test3", Types.STRING));
+        Column column = tableService.insertColumn(table,new ColumnProperties("test", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("test5", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("test9", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("test76", Types.STRING));
+        Assertions.assertEquals(column, tableService.getColumnByName(table,"test"));
     }
 
     @Test
     void DuplicateNameOnColumnCreationThrowsException() throws Exception {
-        table.insertColumn(new ColumnProperties("test", Types.STRING));
-        Assertions.assertThrows(DuplicateEntryException.class, () -> table.insertColumn(new ColumnProperties("test", Types.STRING)));
+        tableService.insertColumn(table,new ColumnProperties("test", Types.STRING));
+        Assertions.assertThrows(DuplicateEntryException.class, () -> tableService.insertColumn(table,new ColumnProperties("test", Types.STRING)));
     }
 
     @Test
     void ColumnNotFoundThrowsException() {
-        Assertions.assertThrows(EntityNotFoundException.class, () -> table.getColumnByName("pinokkió"));
+        Assertions.assertThrows(EntityNotFoundException.class, () -> tableService.getColumnByName(table,"pinokkió"));
     }
 
     @Test
@@ -120,11 +125,11 @@ class AplsqlApplicationTests {
     @Test
     void SelectQueryResultCorrectOrder() throws Exception {
         List<String> names = List.of("testColumn", "alma", "körte");
-        table.insertColumn(new ColumnProperties("alma", Types.STRING));
-        table.insertColumn(new ColumnProperties("körte", Types.STRING));
-        table.insertRecords(Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
-        table.insertRecords(Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
-        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), table.selectRecords(names,new WhereCondition()));
+        tableService.insertColumn(table,new ColumnProperties("alma", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("körte", Types.STRING));
+        tableService.insertRecords(table,Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
+        tableService.insertRecords(table,Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("second", "trash", "veggie")), tableService.selectRecords(table,names,new WhereCondition()));
     }
 
     @Test

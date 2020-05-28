@@ -18,6 +18,11 @@ public class ColumnProperties {
         this.AllowNulls = true;
         dataType = datatype;
     }
+
+    public ColumnProperties(ColumnProperties that){
+        this(that.getName(),that.dataType);
+        this.AllowNulls = that.AllowNulls;
+    }
 //    private String DefaultValue;
 //    private int length;
 

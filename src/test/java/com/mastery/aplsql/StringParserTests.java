@@ -3,7 +3,7 @@ package com.mastery.aplsql;
 import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.WhereCondition;
-import com.mastery.aplsql.service.*;
+import com.mastery.aplsql.service.scraper.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -105,7 +105,7 @@ public class StringParserTests {
     @Test
     void getUpdateValues() throws MalformedQueryException {
         String s = "UPDATE table SET name = Jack, surname = Carl WHERE name = Jack";
-        Assertions.assertEquals(Map.of("name","Jack","surname","Carl"),UpdateQueryStringParser.getUpdateParameters(s));
+        Assertions.assertEquals(Map.of("name","Jack","surname","Carl"), UpdateQueryStringParser.getUpdateParameters(s));
     }
 
 }

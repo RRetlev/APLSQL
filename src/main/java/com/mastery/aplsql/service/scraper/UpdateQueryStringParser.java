@@ -1,6 +1,7 @@
-package com.mastery.aplsql.service;
+package com.mastery.aplsql.service.scraper;
 
 import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
+import com.mastery.aplsql.service.scraper.QueryStringParser;
 
 import java.util.LinkedHashMap;
 import java.util.regex.Matcher;

@@ -1,4 +1,4 @@
-package com.mastery.aplsql.service;
+package com.mastery.aplsql.service.scraper;
 
 import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 

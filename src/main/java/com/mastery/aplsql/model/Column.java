@@ -10,9 +10,14 @@ import java.util.List;
 public class Column<T> {
     private ArrayList<T> data = new ArrayList<>();
     private final Class<T> type;
+
     public Column(Class type) {
         this.type = type;
     }
+    public Column(Column that){
+        this(new ArrayList<>(that.data),that.type);
+    }
+
     public void addDataToColumn(T t) throws TypeMismatchException {
         if (t.getClass() == type) {
             data.add(t);

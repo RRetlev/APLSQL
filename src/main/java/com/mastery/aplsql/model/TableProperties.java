@@ -19,4 +19,8 @@ public class TableProperties {
         this.name = name;
         this.primaryKey = primaryKey;
     }
+
+    public TableProperties(TableProperties that){
+        this(that.getName(),that.primaryKey);
+    }
 }

@@ -1,14 +1,16 @@
-package com.mastery.aplsql.service;
+package com.mastery.aplsql.service.scraper;
 
 import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.OperatorBehaviour;
+import com.mastery.aplsql.service.Util;
+import com.mastery.aplsql.service.scraper.QueryStringParser;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SelectQueryStringParser extends  QueryStringParser{
+public class SelectQueryStringParser extends QueryStringParser {
 
     public static List<String> parseColumnNames(String s) throws MalformedQueryException {
         Pattern p = Pattern.compile("\\bSELECT\\s+(.{2,}|\\*)\\sFROM\\b", Pattern.CASE_INSENSITIVE);
