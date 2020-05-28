@@ -7,9 +7,7 @@ import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.*;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -17,11 +15,31 @@ import java.util.Map;
 
 @SpringBootTest
 public class IntegrationTests {
-    private Storage storage;
+    private static Storage storage;
+    private static Storage snapShot;
 
     @BeforeEach
-    void init() {
+     void init() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
         storage = new Storage();
+        Table table = storage.insertTable(new TableProperties("test"));
+        table.insertColumn(new ColumnProperties("name",Types.STRING));
+        table.insertColumn(new ColumnProperties("email",Types.STRING));
+        table.insertColumn(new ColumnProperties("age",Types.INTEGER));
+        table.insertRecords(Map.of("name","Joe","email","joe@joe.joe","age", "5"));
+        table.insertRecords(Map.of("name","Bill","email","bill@bill.bill","age", "9"));
+        table.insertRecords(Map.of("name","Dick","email","dick@dick.dick","age", "47"));
+        snapShot = new Storage(storage);
+    }
+
+//    @AfterEach
+//    void rollback(){
+//        storage = new Storage(snapShot);
+//    }
+    @Test
+    void testIfSnapShotIsEqual(){
+        Assertions.assertEquals(storage, snapShot);
+        Assertions.assertEquals(storage.getDB(), snapShot.getDB());
+        Assertions.assertEquals(storage.getTableNames(), snapShot.getTableNames());
     }
 
     @Test
@@ -34,22 +52,24 @@ public class IntegrationTests {
 
     @Test
     void DataInsertedFromQuery() throws Exception {
+//        Assertions.assertEquals(snapShot,storage);
         String s = "INSERT INTO test(name) VALUES (Jack)";
-        Table table = storage.insertTable(new TableProperties("test"));
-        Column column = table.insertColumn(new ColumnProperties("name", Types.STRING));
-        table.insertRecords(InsertQueryStringParser.parseInsertValues(s));
-        Assertions.assertEquals("Jack", column.getDataAtIndex(0));
+        Table table = storage.getTableByName(QueryStringParser.parseTableName(s));
+        storage.getTableByName(QueryStringParser.parseTableName(s)).insertRecords(InsertQueryStringParser.parseInsertValues(s));
+        Assertions.assertEquals("Jack", table.getColumnByName("name").getDataAtIndex(3));
+//        Assertions.assertEquals(snapShot,storage);
+
     }
 
     @Test
     void MultipleDataInsertedFromQuery() throws Exception {
-        String s = "INSERT INTO test(name, age) VALUES (Jack,6)";
-        Table table = storage.insertTable(new TableProperties("test"));
-        Column column = table.insertColumn(new ColumnProperties("name", Types.STRING));
-        Column columnb = table.insertColumn(new ColumnProperties("age", Types.INTEGER));
+        String s = "INSERT INTO test(name, age) VALUES (Philip,6)";
+        Table table = storage.getTableByName("test");
+        Column nameColumn = table.getColumnByName("name");
+        Column ageColumn = table.getColumnByName("age");
         table.insertRecords(InsertQueryStringParser.parseInsertValues(s));
-        Assertions.assertEquals("Jack", column.getDataAtIndex(0));
-        Assertions.assertEquals(6, columnb.getDataAtIndex(0));
+        Assertions.assertEquals("Philip", nameColumn.getDataAtIndex(3));
+        Assertions.assertEquals(6, ageColumn.getDataAtIndex(3));
     }
 
     @Test

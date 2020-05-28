@@ -39,7 +39,6 @@ public class QueryController {
     public ResponseEntity<String> createTable(@RequestBody Query query) throws DuplicateEntryException, MalformedQueryException {
         String tableName = CreateQueryStringParser.parseTableName(query.getQueryString());
         HashMap<String, String> columnSpecs = CreateQueryStringParser.getColumnSpecs(query.getQueryString());
-        if (columnSpecs == null) throw new MalformedQueryException();
         storage.insertTable(new TableProperties(tableName)).insertColumns(columnSpecs);
         return new ResponseEntity<>("Table '" + tableName + "' has been created with columns " + columnSpecs.keySet(), HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ public class QueryController {
     }
 
     @DeleteMapping("/drop-table")
-    public ResponseEntity<String> dropTable(@RequestBody Query query) throws EntityNotFoundException {
+    public ResponseEntity<String> dropTable(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException {
         log.info(query.getQueryString());
         String tableName = QueryStringParser.parseTableName(query.getQueryString());
         storage.dropTable(tableName);
@@ -81,9 +80,8 @@ public class QueryController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteRecord(@RequestBody Query query) throws EntityNotFoundException {
+    public ResponseEntity<String> deleteRecord(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException {
         log.info(query.getQueryString());
-        Stack stack = new Stack();
         String tablename = QueryStringParser.parseTableName(query.getQueryString());
         Table table = storage.getTableByName(tablename);
         table.deleteRecords(QueryStringParser.parseWhereCondition(query.getQueryString()));

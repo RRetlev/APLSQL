@@ -84,7 +84,7 @@ public class Table {
         return queryResult;
     }
 
-    public List<List<String>> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) {
+    public List<List<String>> updateRecord(LinkedHashMap<String, String> values, WhereCondition condition) throws EntityNotFoundException {
         List<Integer> correctRecordIndeces = getCorrectIndeces(condition);
         List<String> columnNames = new ArrayList<>(values.keySet());
         //TODO ternary to return correct value

@@ -17,27 +17,27 @@ import java.util.Map;
 public class StringParserTests {
 
     @Test
-    void isCrateTableNameRetrieved() {
+    void isCrateTableNameRetrieved() throws MalformedQueryException {
         String s = "CREATE TABLE dirrdurr";
         Assertions.assertEquals("dirrdurr", CreateQueryStringParser.parseTableName(s));
     }
 
     @Test
-    void oneCreateParameterParsed() {
+    void oneCreateParameterParsed() throws MalformedQueryException {
         String s = "CREATE TABLE dirrdurr(col string)";
         Map<String, String> map = Map.of("col", "string");
         Assertions.assertEquals(map, CreateQueryStringParser.getColumnSpecs(s));
     }
 
     @Test
-    void multipleCreateParametersParsed() {
+    void multipleCreateParametersParsed() throws MalformedQueryException {
         String s = "CREATE TABLE dirrdurr(col string , other string , another int)";
         Map<String, String> map = Map.of("col", "string", "other", "string", "another", "int");
         Assertions.assertEquals(map, CreateQueryStringParser.getColumnSpecs(s));
     }
 
     @Test
-    void isInsertTableNameRetrieved() {
+    void isInsertTableNameRetrieved() throws MalformedQueryException {
         String s = "INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country)\n" +
                 "VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');";
         Assertions.assertEquals("Customers", InsertQueryStringParser.parseTableName(s));
@@ -96,7 +96,7 @@ public class StringParserTests {
             "SELECT * FROM table",
             "DROP TABLE table"
     })
-    void testNewParserTableName(String queryString) {
+    void testNewParserTableName(String queryString) throws MalformedQueryException {
         Assertions.assertEquals("table", QueryStringParser.parseTableName(queryString));
     }
 

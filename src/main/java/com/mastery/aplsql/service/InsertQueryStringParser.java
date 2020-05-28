@@ -20,7 +20,6 @@ public class InsertQueryStringParser extends QueryStringParser {
         String[] columns = insertProps.get(0).split("[\\s,]+");
         String[] values = insertProps.get(1).split("[\\s,]+");
         if (columns.length != values.length) throw new MalformedQueryException();
-
         Map<String, String> insertMap = new HashMap<>();
         for (int i = 0; i < columns.length; i++) {
             insertMap.put(columns[i], values[i]);

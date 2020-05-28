@@ -1,5 +1,6 @@
 package com.mastery.aplsql.service;
 
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.model.WhereCondition;
 
 import java.util.List;
@@ -8,10 +9,10 @@ import java.util.regex.Pattern;
 
 public abstract class QueryStringParser {
 
-    public static String parseTableName(String queryString) {
+    public static String parseTableName(String queryString) throws MalformedQueryException {
         Pattern p = Pattern.compile("\\b(?:FROM|INSERT INTO|UPDATE|DROP TABLE|CREATE TABLE)\\s(\\w+)\\b", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
-        if (!m.find()) return null;
+        if (!m.find()) throw new MalformedQueryException();
         return m.group(1);
     }
 

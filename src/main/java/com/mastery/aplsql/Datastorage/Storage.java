@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +24,33 @@ public class Storage {
     private List<String> tableNames = new ArrayList<>();
 
     public Storage(Storage that){
-        this(that.getDB(),that.getTableNames());
+        this.DB = that.copyOfDB(that.getDB());
+        this.tableNames = that.copyOfTableNames(that.getTableNames());
+//        this(that.copyOfDB(that.getDB()),that.copyOfTableNames(that.getTableNames()));
+    }
+
+    private HashMap<TableProperties, Table> copyOfDB(HashMap<TableProperties, Table> DB){
+        HashMap<TableProperties, Table> copiedDB = new HashMap<>();
+        DB.forEach(copiedDB::put);
+        return copiedDB;
+    }
+
+    private List<String> copyOfTableNames(List<String> tableNames){
+        return new ArrayList<>(tableNames);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Storage storage = (Storage) o;
+        return Objects.equals(DB, storage.DB) &&
+                Objects.equals(tableNames, storage.tableNames);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(DB, tableNames);
     }
 
     public Table insertTable(TableProperties tableProperties) throws DuplicateEntryException {
