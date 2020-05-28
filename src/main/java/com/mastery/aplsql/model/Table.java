@@ -91,21 +91,17 @@ public class Table {
         correctRecordIndeces
                 .forEach(i -> columnNames
                         .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(name).setDataAtIndex(i, values.get(name)))));
-        return selectRecords(new ArrayList<>(this.columnNames),condition);
+        return selectRecords(new ArrayList<>(this.columnNames), condition);
     }
 
     private List<Integer> getCorrectIndeces(WhereCondition condition) throws EntityNotFoundException {
-        return IntStream.range(0, getColumnByName("id").getData().size()).filter(i -> {
-            try {
-                return condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue());
-            } catch (EntityNotFoundException e) {
-                e.printStackTrace();
-            }
-            return false;
-        })
+        return IntStream.range(0, getColumnByName("id").getData().size()).filter(
+                ThrowingPredicate.isEqual(i ->
+                        condition.getOperation().evaluateCondition(getColumnByName(condition.getColumnName()).getDataAtIndex(i).toString(), condition.getValue())))
                 .boxed()
                 .collect(Collectors.toList());
     }
+
     public void deleteRecords(WhereCondition condition) throws EntityNotFoundException {
         List<Integer> correctIndeces = getCorrectIndeces(condition);
         Collections.reverse(correctIndeces);
