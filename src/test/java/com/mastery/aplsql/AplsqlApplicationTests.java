@@ -142,4 +142,17 @@ class AplsqlApplicationTests {
         Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getTablePropertiesByName(storage,"testTable"));
     }
 
+    @Test
+    void SelectQueryWithINConditionWorking() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+        List<String> names = List.of("testColumn", "alma", "körte");
+        tableService.insertColumn(table,new ColumnProperties("alma", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("körte", Types.STRING));
+        tableService.insertRecords(table,Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
+        tableService.insertRecords(table,Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
+        tableService.insertRecords(table,Map.of("testColumn", "third", "alma", "fos", "körte", "mittomen"));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("third", "fos", "mittomen")), tableService.selectRecords(table,names,new WhereCondition("körte",OperatorBehaviour.IN,"(fruit,mittomen)")));
+
+
+    }
+
 }

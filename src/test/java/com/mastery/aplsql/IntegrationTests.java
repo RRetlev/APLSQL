@@ -147,5 +147,15 @@ public class IntegrationTests {
                 tableService.selectRecords(table,List.of("*"), QueryStringParser.parseWhereCondition("WHERE age > 10")));
     }
 
+    @Test
+    void InWhereConditionWorking() throws MalformedQueryException, EntityNotFoundException {
+        String s = "SELECT * FROM test WHERE age IN (5, 9)";
+        List<String> headers = List.of("id", "name", "email", "age");
+        Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
+        Assertions.assertEquals(List.of(headers,List.of("0","Joe","joe@joe.joe","5"),List.of("1","Bill","bill@bill.bill","9")),
+                tableService.selectRecords(table,SelectQueryStringParser.parseColumnNames(s),QueryStringParser.parseWhereCondition(s))
+                );
+    }
+
 }
 

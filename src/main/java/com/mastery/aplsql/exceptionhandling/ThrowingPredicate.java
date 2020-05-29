@@ -12,7 +12,7 @@ public interface ThrowingPredicate<T, E extends Throwable > {
             try {
                 return predicate.test(t) ;
             }catch (Throwable e){
-                throw new RuntimeException();
+                throw new RuntimeException(e);
             }
 
         };
