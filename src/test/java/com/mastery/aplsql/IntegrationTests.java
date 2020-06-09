@@ -7,10 +7,9 @@ import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.DataBaseService;
+import com.mastery.aplsql.service.QueryStringParser;
 import com.mastery.aplsql.service.TableService;
-import com.mastery.aplsql.service.scraper.*;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class IntegrationTests {
     @Test
     void TableCreatedFromQueryString() throws MalformedQueryException, DuplicateEntryException {
         String s = "CREATE TABLE test2 (isActive boolean)";
-        dataBaseService.insertTable(storage,new TableProperties(CreateQueryStringParser.parseTableName(s)));
+        dataBaseService.insertTable(storage,new TableProperties(QueryStringParser.parseTableName(s)));
         Assertions.assertDoesNotThrow(() -> dataBaseService.getTableByName(storage,"test2"));
     }
 
@@ -62,7 +61,7 @@ public class IntegrationTests {
     void DataInsertedFromQuery() throws Exception {
         String s = "INSERT INTO test (name) VALUES (Jack)";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        tableService.insertRecords(dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)),InsertQueryStringParser.parseInsertValues(s));
+        tableService.insertRecords(dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)), QueryStringParser.parseInsertValues(s));
         Assertions.assertEquals("Jack", tableService.getColumnByName(table,"name").getDataAtIndex(3));
 
     }
@@ -73,7 +72,7 @@ public class IntegrationTests {
         Table table = dataBaseService.getTableByName(storage,"test");
         Column nameColumn = tableService.getColumnByName(table,"name");
         Column ageColumn = tableService.getColumnByName(table,"age");
-        tableService.insertRecords(table,InsertQueryStringParser.parseInsertValues(s));
+        tableService.insertRecords(table, QueryStringParser.parseInsertValues(s));
         Assertions.assertEquals("Philip", nameColumn.getDataAtIndex(3));
         Assertions.assertEquals(6, ageColumn.getDataAtIndex(3));
     }
@@ -87,7 +86,7 @@ public class IntegrationTests {
         List<String> col3 = List.of("2", "Dick", "dick@dick.dick", "47");
         Table table = dataBaseService.getTableByName(storage,"test");
         Assertions.assertEquals(List.of(headers, col1, col2, col3),
-                tableService.selectRecords(table,SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+                tableService.selectRecords(table, QueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
     }
 
     @Test
@@ -96,7 +95,7 @@ public class IntegrationTests {
         List<String> headers = List.of("id", "name", "email", "age");
         List<String> colToSelect = List.of("2", "Dick", "dick@dick.dick", "47");
         Table table = dataBaseService.getTableByName(storage,"test");
-        Assertions.assertEquals(List.of(headers, colToSelect), tableService.selectRecords(table,SelectQueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
+        Assertions.assertEquals(List.of(headers, colToSelect), tableService.selectRecords(table, QueryStringParser.parseColumnNames(s), QueryStringParser.parseWhereCondition(s)));
 
     }
 
@@ -104,7 +103,7 @@ public class IntegrationTests {
     void UpdateWithoutWhere() throws MalformedQueryException, EntityNotFoundException {
         String s = "UPDATE test SET name = Emily";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        tableService.updateRecord(table ,UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        tableService.updateRecord(table , QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(0));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(1));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(2));
@@ -114,7 +113,7 @@ public class IntegrationTests {
     void UpdateQueryWithWhere() throws EntityNotFoundException, MalformedQueryException {
         String s = "UPDATE test SET name = Emily WHERE name = Dick";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        tableService.updateRecord(table,UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        tableService.updateRecord(table, QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(2));
     }
 
@@ -122,7 +121,7 @@ public class IntegrationTests {
     void UpdateQueryWithWhereMultipleData() throws EntityNotFoundException, MalformedQueryException {
         String s = "UPDATE test SET name = Emily, age = 10 WHERE name = Dick";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        tableService.updateRecord(table,UpdateQueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
+        tableService.updateRecord(table, QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(2));
         Assertions.assertEquals("10", tableService.getColumnByName(table,"age").getDataAtIndex(2));
 

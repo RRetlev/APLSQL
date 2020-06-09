@@ -1,7 +1,6 @@
 package com.mastery.aplsql.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public enum Types {
     STRING(String.class) {
