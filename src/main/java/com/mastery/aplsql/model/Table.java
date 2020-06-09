@@ -1,13 +1,11 @@
 package com.mastery.aplsql.model;
 
-import com.mastery.aplsql.exceptionhandling.*;
-import com.mastery.aplsql.service.Util;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 @Data
 @AllArgsConstructor

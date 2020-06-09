@@ -1,8 +1,6 @@
 package com.mastery.aplsql.exceptionhandling;
 
-import java.util.Objects;
 import java.util.function.IntPredicate;
-import java.util.function.Predicate;
 
 public interface ThrowingPredicate<T, E extends Throwable > {
     boolean test(int t) throws E;

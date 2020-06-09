@@ -4,9 +4,7 @@ import com.mastery.aplsql.model.Column;
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.Types;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Util {
     public static boolean containsName(List<String> set,String name){

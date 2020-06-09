@@ -7,7 +7,6 @@ import com.mastery.aplsql.model.ColumnProperties;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.model.Types;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
