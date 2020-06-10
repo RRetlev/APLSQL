@@ -102,7 +102,7 @@ public class StringParserTests {
                 Arguments.of("WHERE col != 5", new WhereCondition("col", OperatorBehaviour.NOTEQUAL, "5")),
                 Arguments.of("WHERE col BETWEEN 5", new WhereCondition("col", OperatorBehaviour.BETWEEN, "5")),
                 Arguments.of("WHERE col LIKE column", new WhereCondition("col", OperatorBehaviour.LIKE, "column")),
-                Arguments.of("WHERE col IN column", new WhereCondition("col", OperatorBehaviour.IN, "column"))
+                Arguments.of("WHERE col IN (5, 6, 7)", new WhereCondition("col", OperatorBehaviour.IN, "(5, 6, 7)"))
         );
     }
 }
