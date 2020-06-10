@@ -9,8 +9,8 @@ import com.mastery.aplsql.model.Query;
 import com.mastery.aplsql.model.Table;
 import com.mastery.aplsql.model.TableProperties;
 import com.mastery.aplsql.service.DataBaseService;
+import com.mastery.aplsql.service.QueryStringParser;
 import com.mastery.aplsql.service.TableService;
-import com.mastery.aplsql.service.scraper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,6 @@ public class QueryController {
     Storage storage = new Storage();
     Storage temporaryStorage;
 
-    // using this to test if server is online while api testing
     @GetMapping("/isworking")
     public Boolean isWorking() {
         return true;
@@ -46,8 +45,8 @@ public class QueryController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createTable(@RequestBody Query query) throws DuplicateEntryException, MalformedQueryException {
-        String tableName = CreateQueryStringParser.parseTableName(query.getQueryString());
-        HashMap<String, String> columnSpecs = CreateQueryStringParser.getColumnSpecs(query.getQueryString());
+        String tableName = QueryStringParser.parseTableName(query.getQueryString());
+        HashMap<String, String> columnSpecs = QueryStringParser.getColumnSpecs(query.getQueryString());
         tableService.insertColumns(dataBaseService.insertTable(storage, new TableProperties(tableName)),columnSpecs);
         return new ResponseEntity<>("Table '" + tableName + "' has been created with columns " + columnSpecs.keySet(), HttpStatus.OK);
     }
@@ -55,16 +54,16 @@ public class QueryController {
     @PostMapping("/select")
     public List<List<String>> getResultOfQuery(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException {
         log.info(query.getQueryString());
-        String tableName = SelectQueryStringParser.parseTableName(query.getQueryString());
-        List<String> columnNames = SelectQueryStringParser.parseColumnNames(query.getQueryString());
+        String tableName = QueryStringParser.parseTableName(query.getQueryString());
+        List<String> columnNames = QueryStringParser.parseColumnNames(query.getQueryString());
         return tableService.selectRecords(dataBaseService.getTableByName(storage, tableName), columnNames, QueryStringParser.parseWhereCondition(query.getQueryString()));
     }
 
     @PostMapping("/insert")
     public ResponseEntity<String> addRecord(@RequestBody Query query) throws EntityNotFoundException, TypeMismatchException, MalformedQueryException {
         log.info(query.getQueryString());
-        String tableName = InsertQueryStringParser.parseTableName(query.getQueryString());
-        Map<String, String> insertValues = InsertQueryStringParser.parseInsertValues(query.getQueryString());
+        String tableName = QueryStringParser.parseTableName(query.getQueryString());
+        Map<String, String> insertValues = QueryStringParser.parseInsertValues(query.getQueryString());
         Table table = dataBaseService.getTableByName(storage, tableName);
         tableService.insertRecords(table, insertValues);
         return new ResponseEntity<>(insertValues.values() + " values have been inserted to columns " +
@@ -76,7 +75,7 @@ public class QueryController {
         log.info(query.getQueryString());
         return tableService.updateRecord(
                 dataBaseService.getTableByName(storage, query.getQueryString()),
-                    UpdateQueryStringParser.getUpdateParameters(query.getQueryString()),
+                    QueryStringParser.getUpdateParameters(query.getQueryString()),
                     QueryStringParser.parseWhereCondition(query.getQueryString()
                 )
         );
