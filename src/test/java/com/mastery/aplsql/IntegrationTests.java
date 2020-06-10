@@ -26,7 +26,7 @@ public class IntegrationTests {
     private static Storage snapShot;
 
     @BeforeAll
-    static void init() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException {
+    static void init() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
         tableService = new TableService();
         dataBaseService = new DataBaseService();
         storage = new Storage();
@@ -152,7 +152,7 @@ public class IntegrationTests {
         List<String> headers = List.of("id", "name", "email", "age");
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
         Assertions.assertEquals(List.of(headers,List.of("0","Joe","joe@joe.joe","5"),List.of("1","Bill","bill@bill.bill","9")),
-                tableService.selectRecords(table,SelectQueryStringParser.parseColumnNames(s),QueryStringParser.parseWhereCondition(s))
+                tableService.selectRecords(table,QueryStringParser.parseColumnNames(s),QueryStringParser.parseWhereCondition(s))
                 );
     }
 

@@ -41,7 +41,7 @@ public enum OperatorBehaviour {
     NOTEQUAL(){
         @Override
         public boolean evaluateCondition(String data, String operand){
-            return !data.equals( operand);
+            return !data.equals(operand);
         }
     },
     BETWEEN(){
@@ -65,7 +65,7 @@ public enum OperatorBehaviour {
             Matcher m = p.matcher(operand);
             if (!m.find())throw new MalformedQueryException();
             String values = m.group(0);
-            List<String> list = Arrays.asList( values.substring(1,values.length()-1).split(","));
+            List<String> list = Arrays.asList( values.substring(1,values.length()-1).replaceAll(" ","").split(","));
             //TODO search a valid Regex cause this is a piece of shit
             return list.contains(data);
         }
