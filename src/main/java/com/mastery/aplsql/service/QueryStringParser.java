@@ -53,7 +53,7 @@ public class QueryStringParser {
     }
 
     public static WhereCondition parseWhereCondition(String queryString) {
-        Pattern p = Pattern.compile("\\bWHERE\\s(\\w+)\\s([<>=!]{1,2}|LIKE|IN|BETWEEN)\\s(\\w+)\\b", Pattern.CASE_INSENSITIVE);
+        Pattern p = Pattern.compile("\\bWHERE\\s(\\w+)\\s([<>=!]{1,2}|LIKE|IN|BETWEEN)\\s(\\(.+\\)|\\S+)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(queryString);
         if (!m.find()) return new WhereCondition();
         return new WhereCondition(m.group(1), Util.decideOperation(m.group(2)), m.group(3));
