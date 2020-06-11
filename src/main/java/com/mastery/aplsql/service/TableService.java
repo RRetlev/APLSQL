@@ -1,10 +1,7 @@
 package com.mastery.aplsql.service;
 
 import com.mastery.aplsql.exceptionhandling.*;
-import com.mastery.aplsql.model.Column;
-import com.mastery.aplsql.model.ColumnProperties;
-import com.mastery.aplsql.model.Table;
-import com.mastery.aplsql.model.WhereCondition;
+import com.mastery.aplsql.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -96,7 +93,7 @@ public class TableService {
                 .forEach( i -> columnNames
                         .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(table, name).setDataAtIndex(i,
                                 getColumnPropertiesByName(table, name).getDataType().convert(values.get(name))))));
-        return originalRecord;
+        return selectRecords(table, new ArrayList<>(table.getColumnNames()), new WhereCondition("id", OperatorBehaviour.IN,correctRecordIndeces.toString()));
     }
 
     private List<Integer> getCorrectIndeces(Table table, WhereCondition condition) throws EntityNotFoundException {

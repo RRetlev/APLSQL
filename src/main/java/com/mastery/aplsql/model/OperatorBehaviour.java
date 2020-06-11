@@ -61,7 +61,7 @@ public enum OperatorBehaviour {
     IN(){
         @Override
         public boolean evaluateCondition(String data, String operand) throws MalformedQueryException {
-            Pattern p = Pattern.compile("\\((.*)\\)");
+            Pattern p = Pattern.compile("[(\\[{](.*)[)\\]}]");
             Matcher m = p.matcher(operand);
             if (!m.find())throw new MalformedQueryException();
             String values = m.group(0);
