@@ -64,8 +64,8 @@ public enum OperatorBehaviour {
             Pattern p = Pattern.compile("[(\\[{](.*)[)\\]}]");
             Matcher m = p.matcher(operand);
             if (!m.find())throw new MalformedQueryException();
-            String values = m.group(0);
-            List<String> list = Arrays.asList( values.substring(1,values.length()-1).replaceAll(" ","").split(","));
+            String values = m.group(1);
+            List<String> list = Arrays.asList( values.trim().split(",\\s?"));
             //TODO search a valid Regex
             return list.contains(data);
         }
