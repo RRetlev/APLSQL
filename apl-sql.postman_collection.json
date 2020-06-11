@@ -319,8 +319,8 @@
 					"script": {
 						"id": "7e60b96c-b110-4b36-bb6e-e9a452fefe59",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"    pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1231,8 +1231,8 @@
 					"script": {
 						"id": "6d4b9a47-0f69-4be8-96ea-93683d854d47",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"    pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
 							"});\r",
 							""
 						],
@@ -1554,6 +1554,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "081c422f-4518-42ee-a7b7-577f1f5322df",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7a68f28b-7ed6-49d6-a7ab-f57872cf7374",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	],
 	"protocolProfileBehavior": {}
