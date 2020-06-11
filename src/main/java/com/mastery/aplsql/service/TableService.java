@@ -85,7 +85,8 @@ public class TableService {
         List<String> columnNames = new ArrayList<>(values.keySet());
         correctRecordIndeces
                 .forEach(i -> columnNames
-                        .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(table, name).setDataAtIndex(i, values.get(name)))));
+                        .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(table, name).setDataAtIndex(i,
+                                getColumnPropertiesByName(table, name).getDataType().convert(values.get(name))))));
         return originalRecord;
     }
 

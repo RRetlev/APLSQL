@@ -154,5 +154,14 @@ public class IntegrationTests {
                 );
     }
 
+    @Test
+    void UpdateThrowsTypeMismatch() throws MalformedQueryException, EntityNotFoundException {
+        String s = "UPDATE test SET age = text WHERE name = Bill";
+        Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
+        Assertions.assertThrows(TypeMismatchException.class, ()->tableService.updateRecord(table,
+                QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s)));
+
+    }
+
 }
 
