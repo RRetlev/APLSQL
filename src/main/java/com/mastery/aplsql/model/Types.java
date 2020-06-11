@@ -1,36 +1,42 @@
 package com.mastery.aplsql.model;
 
+import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
+
 import java.time.LocalDate;
 
 public enum Types {
     STRING(String.class) {
         @Override
-        public String convert(String s) {
+        public String convert(String s)  {
             return s;
         }
     },
     INTEGER(Integer.class) {
         @Override
-        public Integer convert(String s) {
-            return Integer.parseInt(s);
+        public Integer convert(String s)  {
+                return Integer.parseInt(s);
         }
     },
     BOOLEAN(Boolean.class) {
         @Override
-        public Boolean convert(String s) {
-            return s.equals("true");
+        public Boolean convert(String s)  {
+                return s.equals("true");
         }
     },
     DATE(LocalDate.class) {
         @Override
-        public LocalDate convert(String s) {
-            return LocalDate.parse(s);
+        public LocalDate convert(String s)  {
+
+                return LocalDate.parse(s);
+
         }
     },
     DOUBLE(Double.class) {
         @Override
         public Double convert(String s) {
-            return Double.parseDouble(s);
+
+                return Double.parseDouble(s);
+
         }
     };
 
@@ -41,5 +47,5 @@ public enum Types {
     }
 
 
-    public abstract Object convert(String s);
+    public abstract Object convert(String s) throws TypeMismatchException;
 }

@@ -64,4 +64,12 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
+    @ExceptionHandler(value = {RuntimeException.class})
+    protected ResponseEntity<Object> handlePhantomException(
+            RuntimeException ex, WebRequest request
+    ){
+        String bodyOfResponse = "This shouldnt be here.!";
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
 }

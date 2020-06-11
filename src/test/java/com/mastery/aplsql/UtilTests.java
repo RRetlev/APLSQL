@@ -1,5 +1,6 @@
 package com.mastery.aplsql;
 
+import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.OperatorBehaviour;
 import com.mastery.aplsql.model.Types;
 import com.mastery.aplsql.service.Util;
@@ -35,7 +36,7 @@ public class UtilTests {
 
     @ParameterizedTest
     @MethodSource("provideStringsTypesAndValues")
-    void typesConvertProperly(String s, Types type, Object expectedValue) {
+    void typesConvertProperly(String s, Types type, Object expectedValue) throws TypeMismatchException {
         Assertions.assertEquals(expectedValue, type.convert(s));
     }
 

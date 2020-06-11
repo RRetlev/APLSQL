@@ -79,12 +79,21 @@ public class TableService {
         return queryResult;
     }
 
-    public List<List<String>> updateRecord(Table table, LinkedHashMap<String, String> values, WhereCondition condition) throws EntityNotFoundException {
+    public void thisShitDoesNothing() throws TypeMismatchException{
+        if (true){
+            return;
+        }else {
+            throw new TypeMismatchException();
+        }
+    }
+
+    public List<List<String>> updateRecord(Table table, LinkedHashMap<String, String> values, WhereCondition condition) throws TypeMismatchException, EntityNotFoundException {
         List<Integer> correctRecordIndeces = getCorrectIndeces(table, condition);
         List<List<String>> originalRecord = selectRecords(table, new ArrayList<>(table.getColumnNames()), condition);
         List<String> columnNames = new ArrayList<>(values.keySet());
+
         correctRecordIndeces
-                .forEach(i -> columnNames
+                .forEach( i -> columnNames
                         .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(table, name).setDataAtIndex(i,
                                 getColumnPropertiesByName(table, name).getDataType().convert(values.get(name))))));
         return originalRecord;

@@ -98,7 +98,7 @@ public class IntegrationTests {
     }
 
     @Test
-    void UpdateWithoutWhere() throws MalformedQueryException, EntityNotFoundException {
+    void UpdateWithoutWhere() throws MalformedQueryException, EntityNotFoundException, TypeMismatchException {
         String s = "UPDATE test SET name = Emily";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
         tableService.updateRecord(table , QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
@@ -108,7 +108,7 @@ public class IntegrationTests {
     }
 
     @Test
-    void UpdateQueryWithWhere() throws EntityNotFoundException, MalformedQueryException {
+    void UpdateQueryWithWhere() throws EntityNotFoundException, MalformedQueryException, TypeMismatchException {
         String s = "UPDATE test SET name = Emily WHERE name = Dick";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
         tableService.updateRecord(table, QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
@@ -116,12 +116,12 @@ public class IntegrationTests {
     }
 
     @Test
-    void UpdateQueryWithWhereMultipleData() throws EntityNotFoundException, MalformedQueryException {
+    void UpdateQueryWithWhereMultipleData() throws EntityNotFoundException, MalformedQueryException, TypeMismatchException {
         String s = "UPDATE test SET name = Emily, age = 10 WHERE name = Dick";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
         tableService.updateRecord(table, QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(2));
-        Assertions.assertEquals("10", tableService.getColumnByName(table,"age").getDataAtIndex(2));
+        Assertions.assertEquals(10, tableService.getColumnByName(table,"age").getDataAtIndex(2));
 
     }
 
@@ -155,10 +155,10 @@ public class IntegrationTests {
     }
 
     @Test
-    void UpdateThrowsTypeMismatch() throws MalformedQueryException, EntityNotFoundException {
+    void UpdateThrowsTypeMismatch() throws MalformedQueryException, EntityNotFoundException, TypeMismatchException {
         String s = "UPDATE test SET age = text WHERE name = Bill";
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        Assertions.assertThrows(TypeMismatchException.class, ()->tableService.updateRecord(table,
+        Assertions.assertThrows(RuntimeException.class, ()->tableService.updateRecord(table,
                 QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s)));
 
     }
