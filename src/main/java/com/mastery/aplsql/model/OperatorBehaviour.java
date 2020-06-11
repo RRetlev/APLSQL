@@ -1,5 +1,12 @@
 package com.mastery.aplsql.model;
 
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public enum OperatorBehaviour {
     EQUAL(){
         @Override
@@ -34,7 +41,7 @@ public enum OperatorBehaviour {
     NOTEQUAL(){
         @Override
         public boolean evaluateCondition(String data, String operand){
-            return !data.equals( operand);
+            return !data.equals(operand);
         }
     },
     BETWEEN(){
@@ -53,11 +60,16 @@ public enum OperatorBehaviour {
     },
     IN(){
         @Override
-        public boolean evaluateCondition(String data, String operand){
-            //TODO Parsing the operand Splitting it into a list then check for contains
-            return true;
+        public boolean evaluateCondition(String data, String operand) throws MalformedQueryException {
+            Pattern p = Pattern.compile("\\((.*)\\)");
+            Matcher m = p.matcher(operand);
+            if (!m.find())throw new MalformedQueryException();
+            String values = m.group(0);
+            List<String> list = Arrays.asList( values.substring(1,values.length()-1).replaceAll(" ","").split(","));
+            //TODO search a valid Regex
+            return list.contains(data);
         }
     };
 
-    public abstract boolean evaluateCondition(String data, String operand);
+    public abstract boolean evaluateCondition(String data, String operand) throws MalformedQueryException;
 }

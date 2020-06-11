@@ -3,6 +3,7 @@ package com.mastery.aplsql;
 import com.mastery.aplsql.Datastorage.Storage;
 import com.mastery.aplsql.exceptionhandling.DuplicateEntryException;
 import com.mastery.aplsql.exceptionhandling.EntityNotFoundException;
+import com.mastery.aplsql.exceptionhandling.MalformedQueryException;
 import com.mastery.aplsql.exceptionhandling.TypeMismatchException;
 import com.mastery.aplsql.model.*;
 import com.mastery.aplsql.service.DataBaseService;
@@ -140,6 +141,19 @@ class AplsqlApplicationTests {
     void tableDropped() throws EntityNotFoundException {
         dataBaseService.dropTable(storage,"testTable");
         Assertions.assertThrows(EntityNotFoundException.class, () -> dataBaseService.getTablePropertiesByName(storage,"testTable"));
+    }
+
+    @Test
+    void SelectQueryWithINConditionWorking() throws DuplicateEntryException, TypeMismatchException, EntityNotFoundException, MalformedQueryException {
+        List<String> names = List.of("testColumn", "alma", "körte");
+        tableService.insertColumn(table,new ColumnProperties("alma", Types.STRING));
+        tableService.insertColumn(table,new ColumnProperties("körte", Types.STRING));
+        tableService.insertRecords(table,Map.of("testColumn", "first", "alma", "pos", "körte", "fruit"));
+        tableService.insertRecords(table,Map.of("testColumn", "second", "alma", "trash", "körte", "veggie"));
+        tableService.insertRecords(table,Map.of("testColumn", "third", "alma", "fos", "körte", "mittomen"));
+        Assertions.assertEquals(List.of(names, List.of("first", "pos", "fruit"), List.of("third", "fos", "mittomen")), tableService.selectRecords(table,names,new WhereCondition("körte",OperatorBehaviour.IN,"(fruit,mittomen)")));
+
+
     }
 
 }

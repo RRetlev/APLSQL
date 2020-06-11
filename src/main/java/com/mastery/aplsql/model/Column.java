@@ -14,6 +14,7 @@ public class Column<T> {
     public Column(Class type) {
         this.type = type;
     }
+
     public Column(Column that){
         this(new ArrayList<>(that.data),that.type);
     }
@@ -33,8 +34,8 @@ public class Column<T> {
         return data.get(i);
     }
 
-    public void setDataAtIndex(int i, T value){
-        data.set(i,value);
+    public void setDataAtIndex(int i, T value) {
+            data.set(i,value);
     }
 
     public void removeDataAtIndex(int i){
