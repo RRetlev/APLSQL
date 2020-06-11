@@ -69,7 +69,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"CREATE TABLE students(name string, age int, isActive boolean)\"}",
+					"raw": "{\"queryString\": \"CREATE TABLE students(name string, age int, isActive boolean, registered date)\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -118,7 +118,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"CREATE TABLE students(name string, age int, isActive boolean)\"}",
+					"raw": "{\"queryString\": \"CREATE TABLE students(name string)\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -177,7 +177,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Thomas, 21, true)\"}"
+					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive, registered) VALUES (Thomas, 21, true, 2020-01-01)\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/insert",
@@ -231,7 +234,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Martha, 20, false)\"}"
+					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive, registered) VALUES (Martha, 20, false, 2020-02-02)\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/insert",
@@ -249,7 +255,64 @@
 			"response": []
 		},
 		{
-			"name": "APLSQL insert invalid",
+			"name": "APLSQL insert 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "013ec911-b6e9-450d-a506-586076040da3",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5e1fa199-f246-4b8b-b491-f5729d8e9bac",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive, registered) VALUES (Bruce, 10, true, 2020-03-03)\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/insert",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL insert invalid type",
 			"event": [
 				{
 					"listen": "test",
@@ -275,7 +338,67 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Thomas, true, 21)\"}"
+					"raw": "{\"queryString\": \"INSERT INTO students (name, age, isActive) VALUES (Thomas, sixtynine, true)\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/insert",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"insert"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL insert non-existent table",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b5b7226-814c-4c90-841a-7b54c9fcb257",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c504a383-d3dc-409d-9014-5c343f66584c",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"INSERT INTO student (name, age, isActive) VALUES (Thomas, 21, true)\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/insert",
@@ -305,7 +428,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"2020-01-01\",\"true\",\"21\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"20\"],[\"2\",\"Bruce\",\"2020-03-03\",\"true\",\"10\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -323,7 +446,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students\"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -353,7 +479,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"name\"],[\"Thomas\"],[\"Martha\"]]');\r",
+							"    pm.response.to.have.body('[[\"name\"],[\"Thomas\"],[\"Martha\"],[\"Bruce\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -371,7 +497,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT name FROM students\"}"
+					"raw": "{\"queryString\": \"SELECT name FROM students\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -401,7 +530,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"name\",\"isActive\"],[\"Thomas\",\"true\"],[\"Martha\",\"false\"]]');\r",
+							"    pm.response.to.have.body('[[\"name\",\"isActive\"],[\"Thomas\",\"true\"],[\"Martha\",\"false\"],[\"Bruce\",\"true\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -585,6 +714,57 @@
 			"response": []
 		},
 		{
+			"name": "APLSQL select where no-match",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "273f24e9-0bf6-4b20-af12-0f4d458f8800",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"]]');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age > 100 \"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "APLSQL select where =",
 			"event": [
 				{
@@ -597,7 +777,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"2020-01-01\",\"true\",\"21\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -615,7 +795,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students WHERE name = Thomas \"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE name = Thomas \"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -645,7 +828,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"20\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -663,7 +846,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students WHERE name != Martha \"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE isActive != true \"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -693,7 +879,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"20\"],[\"2\",\"Bruce\",\"2020-03-03\",\"true\",\"10\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -711,7 +897,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age < 21\"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age < 21\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -741,7 +930,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"2020-01-01\",\"true\",\"21\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -759,7 +948,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age > 20 \"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age > 20 \"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",
@@ -789,7 +981,7 @@
 							"});\r",
 							"\r",
 							"pm.test(\"Body is correct\", function () {\r",
-							"    pm.response.to.have.body('[[\"id\",\"name\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"true\",\"21\"],[\"1\",\"Martha\",\"false\",\"20\"]]');\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"2020-01-01\",\"true\",\"21\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"20\"]]');\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -807,7 +999,458 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age >= 20\"}"
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age >= 20\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select where <=",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "40ce9fce-e457-4f4d-a33a-9e127872677e",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"20\"],[\"2\",\"Bruce\",\"2020-03-03\",\"true\",\"10\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students WHERE age <= 20\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL update one",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9aceb473-47d5-430a-a8c3-f2ba9e3bd725",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"1\",\"Martha\",\"2020-02-02\",\"false\",\"99\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"UPDATE students SET age = 99 WHERE isActive = false \"}     ",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/update",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL update multiple values",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3b1a3acd-5b80-435f-abb1-e26a08eeae82",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"1\",\"Joker\",\"2020-02-02\",\"false\",\"99\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"UPDATE students SET name = Joker, age = 99  WHERE isActive = false \"}     ",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/update",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL update all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e7558f47-b6ab-4be6-bd23-ed53c80ff87c",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"1996-05-01\",\"true\",\"21\"],[\"1\",\"Joker\",\"1996-05-01\",\"false\",\"99\"],[\"2\",\"Bruce\",\"1996-05-01\",\"true\",\"10\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"UPDATE students SET registered = 1996-05-01\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/update",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL update invalid type",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6d4b9a47-0f69-4be8-96ea-93683d854d47",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"    pm.response.to.have.status(409);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"UPDATE students SET age = sixtynine WHERE isActive = false \"}     ",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/update",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL delete one",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "317f9ccf-677b-4c0d-973e-ecfe403bfbcb",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"DELETE FROM students WHERE isActive = false\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/delete",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select remaining",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e3cb5a3a-3d35-4e5b-bad0-e2daabd326ca",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"],[\"0\",\"Thomas\",\"1996-05-01\",\"true\",\"21\"],[\"2\",\"Bruce\",\"1996-05-01\",\"true\",\"10\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/select",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"select"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL delete all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c7d39749-6fb6-414d-b29f-bc479b7b7a11",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"DELETE FROM students\"}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "https://aplsql-staging.herokuapp.com/delete",
+					"protocol": "https",
+					"host": [
+						"aplsql-staging",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLSQL select remaining 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "64913deb-6e74-4c5a-a0dd-8697f443b272",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body is correct\", function () {\r",
+							"    pm.response.to.have.body('[[\"id\",\"name\",\"registered\",\"isActive\",\"age\"]]');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"queryString\": \"SELECT * FROM students\"}",
+					"options": {
+						"raw": {}
+					}
 				},
 				"url": {
 					"raw": "https://aplsql-staging.herokuapp.com/select",

@@ -75,6 +75,4 @@ public class UtilTests {
         );
     }
 
-    void asd(){
-    }
 }

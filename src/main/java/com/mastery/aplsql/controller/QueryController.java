@@ -74,7 +74,7 @@ public class QueryController {
     public List<List<String>> updateRecord(@RequestBody Query query) throws EntityNotFoundException, MalformedQueryException, TypeMismatchException {
         log.info(query.getQueryString());
         return tableService.updateRecord(
-                dataBaseService.getTableByName(storage, query.getQueryString()),
+                dataBaseService.getTableByName(storage, QueryStringParser.parseTableName(query.getQueryString())),
                     QueryStringParser.getUpdateParameters(query.getQueryString()),
                     QueryStringParser.parseWhereCondition(query.getQueryString()
                 )
