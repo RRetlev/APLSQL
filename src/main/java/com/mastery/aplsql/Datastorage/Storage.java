@@ -29,20 +29,4 @@ public class Storage {
         DB.forEach((key, value) -> copiedDB.put(new TableProperties(key), new Table(value)));
         return copiedDB;
     }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Storage storage = (Storage) o;
-        return Objects.equals(DB, storage.DB) &&
-                Objects.equals(tableNames, storage.tableNames);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(DB, tableNames);
-    }
-
 }

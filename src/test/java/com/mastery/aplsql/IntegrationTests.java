@@ -43,10 +43,7 @@ public class IntegrationTests {
 
     @AfterEach
     void rollback(){
-        System.out.println(snapShot.equals(storage));
         storage = new Storage(snapShot);
-        System.out.println(snapShot.equals(storage));
-
     }
 
     @Test
@@ -57,24 +54,25 @@ public class IntegrationTests {
     }
 
 
-    @Test
-    void DataInsertedFromQuery() throws Exception {
-        String s = "INSERT INTO test (name) VALUES (Jack)";
-        Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
-        tableService.insertRecords(dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)), QueryStringParser.parseInsertValues(s));
-        Assertions.assertEquals("Jack", tableService.getColumnByName(table,"name").getDataAtIndex(3));
 
+    @Test
+    void WrongNumberOfDataInsertedFromQueryThrows() throws Exception {
+        String s = "INSERT INTO test (name) VALUES (Jack)";
+        dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
+        Assertions.assertThrows(MalformedQueryException.class,() -> tableService.insertRecords(dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s)), QueryStringParser.parseInsertValues(s)));
     }
 
     @Test
     void MultipleDataInsertedFromQuery() throws Exception {
-        String s = "INSERT INTO test (name, age) VALUES (Philip,6)";
+        String s = "INSERT INTO test (name, age, email) VALUES (Philip,6,philip@philip.philip)";
         Table table = dataBaseService.getTableByName(storage,"test");
         Column nameColumn = tableService.getColumnByName(table,"name");
         Column ageColumn = tableService.getColumnByName(table,"age");
+        Column emailColumn = tableService.getColumnByName(table,"email");
         tableService.insertRecords(table, QueryStringParser.parseInsertValues(s));
         Assertions.assertEquals("Philip", nameColumn.getDataAtIndex(3));
         Assertions.assertEquals(6, ageColumn.getDataAtIndex(3));
+        Assertions.assertEquals("philip@philip.philip", emailColumn.getDataAtIndex(3));
     }
 
     @Test

@@ -66,7 +66,7 @@ public enum OperatorBehaviour {
             if (!m.find())throw new MalformedQueryException();
             String values = m.group(0);
             List<String> list = Arrays.asList( values.substring(1,values.length()-1).replaceAll(" ","").split(","));
-            //TODO search a valid Regex cause this is a piece of shit
+            //TODO search a valid Regex
             return list.contains(data);
         }
     };

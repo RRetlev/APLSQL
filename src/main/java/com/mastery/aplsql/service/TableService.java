@@ -81,11 +81,12 @@ public class TableService {
 
     public List<List<String>> updateRecord(Table table, LinkedHashMap<String, String> values, WhereCondition condition) throws EntityNotFoundException {
         List<Integer> correctRecordIndeces = getCorrectIndeces(table, condition);
+        List<List<String>> originalRecord = selectRecords(table, new ArrayList<>(table.getColumnNames()), condition);
         List<String> columnNames = new ArrayList<>(values.keySet());
         correctRecordIndeces
                 .forEach(i -> columnNames
                         .forEach(ThrowingConsumer.unchecked(name -> getColumnByName(table, name).setDataAtIndex(i, values.get(name)))));
-        return selectRecords(table, new ArrayList<>(table.getColumnNames()), condition);
+        return originalRecord;
     }
 
     private List<Integer> getCorrectIndeces(Table table, WhereCondition condition) throws EntityNotFoundException {
