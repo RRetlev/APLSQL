@@ -121,7 +121,7 @@ public class IntegrationTests {
         Table table = dataBaseService.getTableByName(storage,QueryStringParser.parseTableName(s));
         tableService.updateRecord(table, QueryStringParser.getUpdateParameters(s), QueryStringParser.parseWhereCondition(s));
         Assertions.assertEquals("Emily", tableService.getColumnByName(table,"name").getDataAtIndex(2));
-        Assertions.assertEquals("10", tableService.getColumnByName(table,"age").getDataAtIndex(2));
+        Assertions.assertEquals(10, tableService.getColumnByName(table,"age").getDataAtIndex(2));
 
     }
 
