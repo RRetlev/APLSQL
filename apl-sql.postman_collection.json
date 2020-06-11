@@ -28,12 +28,9 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/isworking",
-					"protocol": "https",
+					"raw": "{{HOST}}/isworking",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"isworking"
@@ -77,12 +74,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/create",
-					"protocol": "https",
+					"raw": "{{HOST}}/create",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"create"
@@ -126,12 +120,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/create",
-					"protocol": "https",
+					"raw": "{{HOST}}/create",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"create"
@@ -183,12 +174,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/insert",
-					"protocol": "https",
+					"raw": "{{HOST}}/insert",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"insert"
@@ -240,12 +228,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/insert",
-					"protocol": "https",
+					"raw": "{{HOST}}/insert",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"insert"
@@ -297,12 +282,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/insert",
-					"protocol": "https",
+					"raw": "{{HOST}}/insert",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"insert"
@@ -344,12 +326,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/insert",
-					"protocol": "https",
+					"raw": "{{HOST}}/insert",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"insert"
@@ -401,12 +380,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/insert",
-					"protocol": "https",
+					"raw": "{{HOST}}/insert",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"insert"
@@ -452,12 +428,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -503,12 +476,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -554,12 +524,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -601,12 +568,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -648,12 +612,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -699,12 +660,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -750,12 +708,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -801,12 +756,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -852,12 +804,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -903,12 +852,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -954,12 +900,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -1005,12 +948,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -1056,12 +996,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -1107,12 +1044,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/update",
-					"protocol": "https",
+					"raw": "{{HOST}}/update",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"update"
@@ -1158,12 +1092,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/update",
-					"protocol": "https",
+					"raw": "{{HOST}}/update",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"update"
@@ -1209,12 +1140,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/update",
-					"protocol": "https",
+					"raw": "{{HOST}}/update",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"update"
@@ -1257,12 +1185,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/update",
-					"protocol": "https",
+					"raw": "{{HOST}}/update",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"update"
@@ -1304,12 +1229,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/delete",
-					"protocol": "https",
+					"raw": "{{HOST}}/delete",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"delete"
@@ -1355,12 +1277,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -1402,12 +1321,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/delete",
-					"protocol": "https",
+					"raw": "{{HOST}}/delete",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"delete"
@@ -1453,12 +1369,9 @@
 					}
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/select",
-					"protocol": "https",
+					"raw": "{{HOST}}/select",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"select"
@@ -1497,12 +1410,9 @@
 					"raw": "{\"queryString\": \"DROP TABLE students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/drop-table",
-					"protocol": "https",
+					"raw": "{{HOST}}/drop-table",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"drop-table"
@@ -1541,12 +1451,9 @@
 					"raw": "{\"queryString\": \"DROP TABLE students\"}"
 				},
 				"url": {
-					"raw": "https://aplsql-staging.herokuapp.com/drop-table",
-					"protocol": "https",
+					"raw": "{{HOST}}/drop-table",
 					"host": [
-						"aplsql-staging",
-						"herokuapp",
-						"com"
+						"{{HOST}}"
 					],
 					"path": [
 						"drop-table"
